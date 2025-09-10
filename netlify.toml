@@ -1,0 +1,21 @@
+[build]
+  publish = "public"
+  command = "chmod +x build.sh && ./build.sh"
+
+[build.environment]
+  PHP_VERSION = "8.2"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.php"
+  status = 200
+
+[context.production.environment]
+  APP_ENV = "production"
+  APP_DEBUG = "false"
+  APP_KEY = "base64:GENERATE_NEW_KEY_ON_DEPLOYMENT"
+  DB_CONNECTION = "sqlite"
+  DB_DATABASE = "/tmp/database.sqlite"
+  SESSION_DRIVER = "file"
+  CACHE_DRIVER = "file"
+  QUEUE_CONNECTION = "sync"
