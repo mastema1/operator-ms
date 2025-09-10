@@ -3,7 +3,7 @@
   command = "chmod +x build.sh && ./build.sh"
 
 [build.environment]
-  PHP_VERSION = "8.2"
+  PHP_VERSION = "8.1"
 
 [[redirects]]
   from = "/*"
@@ -15,7 +15,7 @@
   APP_DEBUG = "false"
   APP_KEY = "base64:GENERATE_NEW_KEY_ON_DEPLOYMENT"
   DB_CONNECTION = "sqlite"
-  DB_DATABASE = "/tmp/database.sqlite"
+  DB_DATABASE = "database/database.sqlite"
   SESSION_DRIVER = "file"
   CACHE_DRIVER = "file"
   QUEUE_CONNECTION = "sync"

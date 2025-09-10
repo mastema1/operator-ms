@@ -6,11 +6,24 @@ echo "Starting Laravel deployment build..."
 # Install PHP dependencies
 composer install --no-dev --optimize-autoloader
 
-# Create SQLite database if it doesn't exist
-touch /tmp/database.sqlite
+# Create storage directories if they don't exist
+mkdir -p storage/logs
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+mkdir -p bootstrap/cache
 
-# Generate application key if not set
+# Create SQLite database
+touch database/database.sqlite
+
+# Generate application key
 php artisan key:generate --force
+
+# Set environment for production
+export APP_ENV=production
+export APP_DEBUG=false
+export DB_CONNECTION=sqlite
+export DB_DATABASE=database/database.sqlite
 
 # Run database migrations and seeders
 php artisan migrate --force
@@ -23,6 +36,6 @@ php artisan view:cache
 
 # Set proper permissions
 chmod -R 755 storage bootstrap/cache
-chmod 666 /tmp/database.sqlite
+chmod 644 database/database.sqlite
 
 echo "Laravel deployment build completed!"
