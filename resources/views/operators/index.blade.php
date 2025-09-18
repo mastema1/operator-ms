@@ -13,10 +13,10 @@
                 <form method="GET" action="{{ route('operators.index') }}" class="flex items-center gap-3">
                     <input type="text" name="search" value="{{ $search }}" placeholder="Search by matricule, name, poste" class="flex-1 border rounded px-3 py-2">
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Search</button>
-                    {{-- <a href="{{ route('operators.index', array_merge(request()->query(), ['critical_only' => request('critical_only') ? '' : '1'])) }}" 
+                    <a href="{{ route('operators.index', array_merge(request()->query(), ['critical_only' => request('critical_only') ? '' : '1'])) }}" 
                        class="px-4 py-2 rounded border transition-colors {{ request('critical_only') ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
                         {{ request('critical_only') ? 'Show All' : 'Critical Only' }}
-                    </a> --}}
+                    </a>
                 </form>
             </div>
 
@@ -36,8 +36,8 @@
                                 <th class="p-3">Poste</th>
                                 <th class="p-3">Ligne</th>
                                 <th class="p-3">Critical Status</th>
-                                <th class="p-3">Ancienneté</th>
-                                <th class="p-3">Type de Contrat</th>
+                                {{-- <th class="p-3">Ancienneté</th> --}}
+                                {{-- <th class="p-3">Type de Contrat</th> --}}
                                 <th class="p-3">Actions</th>
                             </tr>
                         </thead>
@@ -50,14 +50,21 @@
                                     <td class="p-3">{{ $op->poste?->name }}</td>
                                     <td class="p-3">{{ $op->ligne }}</td>
                                     <td class="p-3">
-                                        @if($op->poste && $op->poste->is_critical)
+                                        @php
+                                            $positionKey = $op->poste_id . '_' . $op->ligne;
+                                            
+                                            // Check critical status based ONLY on critical_positions table
+                                            // A position is critical ONLY if explicitly marked as such
+                                            $isCritical = isset($criticalPositions[$positionKey]);
+                                        @endphp
+                                        @if($isCritical)
                                             <span class="text-red-600 font-medium">Critical</span>
                                         @else
                                             <span class="text-green-600 font-medium">Non-critical</span>
                                         @endif
                                     </td>
-                                    <td class="p-3">{{ $op->anciente }}</td>
-                                    <td class="p-3">{{ $op->type_de_contrat }}</td>
+                                    {{-- <td class="p-3">{{ $op->anciente }}</td> --}}
+                                    {{-- <td class="p-3">{{ $op->type_de_contrat }}</td> --}}
                                     <td class="p-3 space-x-2">
                                         <a href="{{ route('operators.edit', $op) }}" class="px-3 py-1 border rounded">Edit</a>
                                         <form method="POST" action="{{ route('operators.destroy', $op) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this operator?');">

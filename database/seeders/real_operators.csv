@@ -1,0 +1,50 @@
+matricule,first_name,last_name,poste_name,anciente,type_de_contrat,ligne,is_capable,is_critical
+2244597,Khadija,Chafik,ABS,,,,true,true
+2251200,Karim,El Maskaoui,Bouchon,,,,true,false
+2252293,Otman,Miloudi,Bol,,,,true,true
+2241341,Othmane,El Gamraoui,Bol,,,,true,true
+2240600,Sohaib,Bigaa,Bol,,,,true,true
+2216250,Ghizlane,Khadou,CMC,,,,true,false
+2240843,Hajar,Hraga,COND,,,,true,false
+2218865,Hanan,Elkhalouqy,COND,,,,true,false
+2240019,Ayoub,El komiti,FILISTE,,,,true,false
+2244601,Mouad,El Bayadi Farah,FILISTE EPS,,,,true,false
+2244548,Siham,Kharoubi,FW,,,,true,false
+2252315,Amina,El Azizi,POLY,,,,true,false
+2219836,Hasnaa,Benkazza,POLY,,,,true,false
+2252327,Hafsa,Arib,POLY,,,,true,false
+2251462,Bochra,Elmatouki,Poste 01,,,,true,false
+2251109,Chaimae,Lamkirich,Poste 02,,,,true,false
+2251659,Meryem,El Ghandouri,Poste 03,,,,true,false
+2251457,Nouhayla,Mazgouri,Poste 04,,,,true,false
+2218958,Aziza,Dahhan,Poste 05,,,,true,false
+2218667,Nouhaila,Ouldaib,Poste 06,,,,true,false
+2243669,Fadoua,El Khaoua,Poste 07,,,,true,false
+2218943,Mouaad,Boutaleb,Poste 08,,,,true,false
+2242649,Saida,Lamchachti,Poste 09,,,,true,false
+2217050,Naoual,Meftah,Poste 10,,,,true,false
+2215796,Houssam,Shissah,Poste 11,,,,true,false
+2250676,Mohammed,Lassiri,Poste 12,,,,true,false
+2242808,Adil,Abdelouassae,Poste 13,,,,true,false
+2240018,Mouna,Timjichte,Poste 14,,,,true,false
+2218946,Soukaina,Elbouiri,Poste 15,,,,true,false
+2253580,Taha,Lambarki,Poste 16,,,,true,false
+2241924,Tghida,Naouri,Poste 17,,,,true,false
+2251664,Mehdi,Soumiya,Poste 18,,,,true,false
+2215182,Asmaa,Ait Moulid,Poste 20,,,,true,false
+2218359,Anass,El Bouzai,Poste 21,,,,true,false
+2250693,Mohssine,Ait El Walid,Poste 22,,,,true,true
+2250405,Omar,El yakhlafi,Poste 23,,,,true,true
+2240832,Abdelkhalek,Khafdi,Poste 24,,,,true,false
+2188019,Zakaria,Moufid,Qualité,,,,true,false
+2218034,Hicham,El kessab,Ravitailleur,,,,true,false
+2252314,Said,Mahfoud,Retouche,,,,true,false
+2253902,Bouchra,El akhdari,TAG,,,,true,false
+2218327,Oussama,Znasni,TAG,,,,true,false
+2217901,Salah,El Bouchri,TAG,,,,true,false
+2219320,Eddine,Bourial,TAG,,,,true,false
+2241388,Oussama,Lahouara,TAG,,,,true,false
+2218098,Ahmed,El Ouahabi,TAG,,,,true,false
+2218036,Kaouthar,Berbouchi,Team Speaker,,,,true,false
+2242553,Youssef,Alla,Team Speaker,,,,true,false
+2241491,Abdessamad,Mourabou,VISSEUSE,,,,true,true

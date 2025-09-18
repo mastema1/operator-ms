@@ -1,0 +1,11 @@
+matricule,first_name,last_name,poste_name,anciente,type_de_contrat,ligne,is_capable,is_critical
+OP-0001,Mohammed,Alami,Poste 1,2 ans,CDI,Ligne 1,true,false
+OP-0002,Fatima,Benali,Bol,3 ans,CDI,Ligne 1,true,true
+OP-0003,Ahmed,Cherkaoui,Poste 2,1 ans,CDD 2 ans,Ligne 2,true,false
+OP-0004,Aicha,Fassi,VISSEUSE,4 ans,CDI,Ligne 1,true,true
+OP-0005,Youssef,Idrissi,Poste 3,6 mois,ANAPEC,Ligne 3,false,false
+OP-0006,Khadija,Kettani,ABS,2 ans,CDI,Ligne 1,true,true
+OP-0007,Hassan,Lahlou,Poste 4,3 ans,CDI,Ligne 2,true,false
+OP-0008,Zineb,Mansouri,TAG,1 ans,CDD 1 ans,Ligne 1,true,true
+OP-0009,Omar,Naciri,Poste 5,5 ans,CDI,Ligne 3,true,false
+OP-0010,Latifa,Ouali,Retouche,2 ans,CDI,Ligne 2,true,true

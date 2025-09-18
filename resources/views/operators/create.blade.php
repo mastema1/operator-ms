@@ -45,6 +45,7 @@
                             <option value="0" @selected(old('is_critical') == '0')>Non-critical</option>
                             <option value="1" @selected(old('is_critical') == '1')>Critical</option>
                         </select>
+                        <p class="text-xs text-gray-500 mt-1">Critical status applies to the specific Poste + Ligne combination</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <input id="capable" name="is_capable" type="checkbox" value="1" @checked(old('is_capable', true)) class="border rounded">
@@ -93,29 +94,4 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const posteSelect = document.querySelector('select[name="poste_id"]');
-            const criticalStatusSelect = document.querySelector('select[name="is_critical"]');
-            
-            const postesData = @json($postes->keyBy('id')->map(function($poste) {
-                return ['name' => $poste->name, 'is_critical' => $poste->is_critical];
-            }));
-
-            posteSelect.addEventListener('change', function() {
-                const selectedPosteId = this.value;
-                if (selectedPosteId && postesData[selectedPosteId]) {
-                    const poste = postesData[selectedPosteId];
-                    criticalStatusSelect.value = poste.is_critical ? '1' : '0';
-                } else {
-                    criticalStatusSelect.value = '0';
-                }
-            });
-
-            // Trigger change event on page load if there's a selected value
-            if (posteSelect.value) {
-                posteSelect.dispatchEvent(new Event('change'));
-            }
-        });
-    </script>
 </x-app-layout> 

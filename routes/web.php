@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StaticDashboardController;
+use App\Http\Controllers\BackupAssignmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,10 +15,36 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard-static', [StaticDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.static');
+
+// About Me page routes
+Route::get('/about-me', function () {
+    return response()->file(public_path('about-me.html'));
+})->name('about-me');
+
+Route::get('/about-me-prof', function () {
+    return response()->file(public_path('about-me-prof.html'));
+})->name('about-me-prof');
+
+Route::get('/about-me-per', function () {
+    return response()->file(public_path('about-me-per.html'));
+})->name('about-me-per');
+
+// Sick page route
+Route::get('/sick', function () {
+    return view('sick');
+})->name('sick');
+
+// Backup assignment API routes
+Route::post('/api/backup-assignments/assign', [BackupAssignmentController::class, 'assign'])->middleware(['auth', 'verified'])->name('backup.assign');
+Route::delete('/api/backup-assignments/remove/{assignment}', [BackupAssignmentController::class, 'remove'])->middleware(['auth', 'verified'])->name('backup.remove');
+Route::get('/api/backup-assignments/available-operators', [BackupAssignmentController::class, 'getAvailableOperators'])->middleware(['auth', 'verified'])->name('backup.operators');
+Route::get('/api/backup-assignments/poste/{poste}', [BackupAssignmentController::class, 'getPosteAssignments'])->middleware(['auth', 'verified'])->name('backup.poste');
 
 Route::middleware('auth')->group(function () {
     Route::get('/operators', [\App\Http\Controllers\OperatorController::class, 'index'])->name('operators.index');
+    Route::get('/api/operators', [\App\Http\Controllers\OperatorController::class, 'apiIndex'])->name('api.operators');
     Route::get('/absences', \App\Livewire\Absences::class)->name('absences.index');
     Route::get('/post-status', \App\Livewire\PostStatus::class)->name('post-status.index');
     Route::get('/postes', [\App\Http\Controllers\PosteController::class, 'index'])->name('postes.index');

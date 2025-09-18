@@ -15,7 +15,10 @@ class OperatorSeeder extends Seeder
             $this->call(PosteSeeder::class);
         }
 
-        // Create 50 operators distributed among existing postes
+        // Clear existing operators to prevent duplicates
+        Operator::truncate();
+
+        // Create 50 operators with Moroccan names
         Operator::factory()->count(50)->create();
     }
 } 

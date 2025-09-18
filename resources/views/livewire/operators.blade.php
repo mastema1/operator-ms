@@ -26,8 +26,8 @@
                     <th class="p-3 w-32">First Name</th>
                     <th class="p-3 w-32">Last Name</th>
                     <th class="p-3 w-28">Poste</th>
-                    <th class="p-3 w-28">Ancienneté</th>
-                    <th class="p-3 w-36">Type de Contrat</th>
+                    {{-- <th class="p-3 w-28">Ancienneté</th> --}}
+                    {{-- <th class="p-3 w-36">Type de Contrat</th> --}}
                     <th class="p-3 w-28">Ligne</th>
                     <th class="p-3 w-32">Poste Critical</th>
                     <th class="p-3 w-32">Operator Critical</th>
@@ -42,8 +42,8 @@
                         <td class="p-3">{{ $op->first_name }}</td>
                         <td class="p-3">{{ $op->last_name }}</td>
                         <td class="p-3">{{ $op->poste?->name }}</td>
-                        <td class="p-3">{{ $op->anciente }}</td>
-                        <td class="p-3">{{ $op->type_de_contrat }}</td>
+                        {{-- <td class="p-3">{{ $op->anciente }}</td> --}}
+                        {{-- <td class="p-3">{{ $op->type_de_contrat }}</td> --}}
                         <td class="p-3">{{ $op->ligne }}</td>
                         <td class="p-3">
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $op->poste?->is_critical ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800' }}">

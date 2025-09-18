@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Poste;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,6 +29,7 @@ class PosteFactory extends Factory
             'name' => $this->faker->randomElement($posteNames),
             'ligne' => $this->faker->randomElement($ligneOptions),
             'is_critical' => $this->faker->boolean(30), // 30% chance of being critical
+            'tenant_id' => Tenant::inRandomOrder()->first()?->id ?? Tenant::factory(),
         ];
     }
 } 

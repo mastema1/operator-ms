@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Attendance;
 use App\Models\Operator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -28,24 +30,29 @@ class Absences extends Component
     public function toggleAttendance($operatorId)
     {
         try {
-            $today = today();
-            $attendance = Attendance::firstOrNew([
-                'operator_id' => $operatorId,
-                'date' => $today,
-            ]);
+            $operator = Operator::findOrFail($operatorId);
             
-            // If attendance record exists, toggle between absent/present
-            // If no record exists, default to absent
-            if ($attendance->exists) {
-                $attendance->status = $attendance->status === 'absent' ? 'present' : 'absent';
+            // Get today's attendance record
+            $attendance = Attendance::where('operator_id', $operatorId)
+                ->whereDate('date', today())
+                ->first();
+            
+            if ($attendance) {
+                // Toggle the status
+                $attendance->status = $attendance->status === 'present' ? 'absent' : 'present';
+                $attendance->save();
             } else {
-                $attendance->status = 'absent';
+                // Create new attendance record as absent (since default assumption is present)
+                Attendance::create([
+                    'operator_id' => $operatorId,
+                    'date' => today(),
+                    'status' => 'absent'
+                ]);
             }
             
-            $attendance->save();
-            
-            // Force a complete re-render to ensure button states update
-            $this->dispatch('$refresh');
+            // Clear dashboard cache when attendance is updated
+            $cacheKey = 'dashboard_data_' . today()->format('Y-m-d');
+            Cache::forget($cacheKey);
             
             // Add a session flash message to confirm the action
             session()->flash('message', 'Attendance updated successfully');
@@ -57,13 +64,18 @@ class Absences extends Component
 
     public function render()
     {
-        $operators = Operator::with(['poste', 'attendances' => function ($q) { $q->forToday(); }])
+        $operators = Operator::with(['poste', 'attendances' => function ($q) {
+            $q->forToday()->select('id', 'operator_id', 'date', 'status');
+        }])
+            ->select('id', 'first_name', 'last_name', 'poste_id', 'ligne')
             ->when($this->search, function (Builder $q) {
                 $term = '%'.$this->search.'%';
                 $q->where(function (Builder $sub) use ($term) {
                     $sub->where('first_name', 'like', $term)
                         ->orWhere('last_name', 'like', $term)
-                        ->orWhereHas('poste', function (Builder $p) use ($term) { $p->where('name', 'like', $term); });
+                        ->orWhereHas('poste', function (Builder $p) use ($term) {
+                            $p->where('name', 'like', $term);
+                        });
                 });
             })
             ->when($this->ligneFilter, function (Builder $q) {

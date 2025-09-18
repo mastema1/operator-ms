@@ -3,9 +3,12 @@
     <div class="bg-white rounded-lg shadow">
         <div class="p-6 border-b border-gray-200">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-semibold text-gray-900">Postes Management</h1>
-                <a href="{{ route('postes.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                    Add New Poste
+                <div>
+                    <h1 class="text-2xl font-semibold text-gray-900">Position Assignments</h1>
+                    <p class="text-sm text-gray-600 mt-1">Manage operator assignments and their critical status by position (Poste + Ligne)</p>
+                </div>
+                <a href="{{ route('operators.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                    Add New Assignment
                 </a>
             </div>
         </div>
@@ -16,7 +19,7 @@
                 <div class="flex gap-4">
                     <div class="flex-1">
                         <input type="text" name="search" value="{{ $search }}" 
-                               placeholder="Search postes or operators..." 
+                               placeholder="Search operators, postes, or lignes..." 
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md">
@@ -57,16 +60,38 @@
                                     {{ $poste->name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $poste->ligne ?? 'N/A' }}
+                                    @if($poste->operators->count() > 0)
+                                        @php
+                                            $lignes = $poste->operators->pluck('ligne')->filter()->unique()->sort()->values();
+                                        @endphp
+                                        @if($lignes->count() > 0)
+                                            {{ $lignes->join(', ') }}
+                                        @else
+                                            <span class="text-gray-400 italic">No ligne assigned</span>
+                                        @endif
+                                    @else
+                                        <span class="text-gray-400 italic">No operators</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($poste->is_critical)
+                                    @php
+                                        // Check if any position (poste + ligne combination) for this poste is critical
+                                        $hasCriticalPosition = false;
+                                        foreach($poste->operators as $operator) {
+                                            $key = $poste->id . '_' . $operator->ligne;
+                                            if(isset($criticalPositions[$key])) {
+                                                $hasCriticalPosition = true;
+                                                break;
+                                            }
+                                        }
+                                    @endphp
+                                    @if($hasCriticalPosition)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Critical
+                                            Has Critical Positions
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                            Non-critical
+                                            No Critical Positions
                                         </span>
                                     @endif
                                 </td>

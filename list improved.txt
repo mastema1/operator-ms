@@ -1,0 +1,52 @@
+the fields "Anciente" and "type de contrat" are empty for all of them, all of them have 
+
+Matricule,First Name,Last Name,Poste,Ligne,Critical Status
+2244597,Khadija ,Chafik,ABS,Ligne1,critical
+2251200,Karim,El Maskaoui,Bouchon,Ligne1,non-critical
+2252293,Otman,Miloudi,Bol,Ligne1,critical
+2241341,Othmane, El Gamraoui,Bol,Ligne1,critical
+2240600,Sohaib,Bigaa,Bol,Ligne1,critical
+2216250,ghizlane,khadou,CMC,Ligne1,non-critical
+2240843,Hajar, Hraga,COND,Ligne1,non-critical
+2218865,Hanan, Elkhalouqy,COND,Ligne1,non-critical
+2240019,Ayoub, El komiti,FILISTE,Ligne1,non-critical
+2244601,Mouad,El Bayadi Farah,FILISTE EPS,Ligne1,non-critical
+2244548,Siham, Kharoubi,FW,Ligne1,non-critical
+2252315,Amina, El Azizi,POLY,Ligne1,non-critical
+2219836,Hasnaa, Benkazza,POLY,Ligne1,non-critical
+2252327,HAFSA, ARIB,POLY,Ligne1,non-critical
+2251462,BOCHRA, Elmatouki,Poste 01,Ligne1,non-critical
+2251109,CHAIMAE, LAMKIRICH,Poste 02,Ligne1,non-critical
+2251659,MERYEM, EL GHANDOURI,Poste 03,Ligne1,non-critical
+2251457,Nouhayla, MAZGOURI,Poste 04,Ligne1,non-critical
+2218958,Aziza, Dahhan,Poste 05,Ligne1,non-critical
+2218667,Nouhaila, Ouldaib,Poste 06,Ligne1,non-critical
+2243669,Fadoua, El Khaoua,Poste 07,Ligne1,non-critical
+2218943,Mouaad, Boutaleb,Poste 08,Ligne1,non-critical
+2242649,Saida, Lamchachti,Poste 09,Ligne1,non-critical
+2217050,Naoual, Meftah,Poste 10,Ligne1,non-critical
+2215796,Houssam, Shissah,Poste 11,Ligne1,non-critical
+2250676,Mohammed, lassiri,Poste 12,Ligne1,non-critical
+2242808,Adil, Abdelouassae,Poste 13,Ligne1,non-critical
+2240018,Mouna, Timjichte,Poste 14,Ligne1,non-critical
+2218946,soukaina, Elbouiri,Poste 15,Ligne1,non-critical
+2253580,Taha, lambarki,Poste 16,Ligne1,non-critical
+2241924,TGHIDA, Naouri,Poste 17,Ligne1,non-critical
+2251664,Mehdi, SOUMIYA,POSTE 18,Ligne1,non-critical
+2215182,Asmaa, Ait Moulid,Poste 20,Ligne1,non-critical
+2218359,Anass, El Bouzai,Poste 21,Ligne1,non-critical
+2250693,Mohssine, Ait El Walid,Poste 22,Ligne1,critical
+2250405,Omar, El yakhlafi,POSTE 23,Ligne1,critical
+2240832,Abdelkhalek, Khafdi,Poste 24,Ligne1,non-critical
+2188019,Zakaria, Moufid,Qualit?,Ligne1,non-critical
+2218034,Hicham, El kessab,Ravitailleur,Ligne1,non-critical
+2252314,Said, Mahfoud,Retouche,Ligne1,non-critical
+2253902,Bouchra, El akhdari,TAG,Ligne1,non-critical
+2218327,Oussama, Znasni,TAG,Ligne1,non-critical
+2217901,Salah, El Bouchri,TAG,Ligne1,non-critical
+2219320,Eddine,  Bourial,TAG,Ligne1,non-critical
+2241388,Oussama, Lahouara,TAG,Ligne1,non-critical
+2218098,Ahmed, El Ouahabi,TAG,Ligne1,non-critical
+2218036,Kaouthar, Berbouchi,Team Speaker,Ligne1,non-critical
+2242553,Youssef, Alla,Team Speaker,Ligne1,non-critical
+2241491,Abdessamad, Mourabou,VISSEUSE,Ligne1,critical

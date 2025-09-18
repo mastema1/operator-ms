@@ -1,4 +1,4 @@
-<!--<div class="p-6 space-y-6" x-data="{ showBackup: $wire.entangle('showBackupModal') }">
+<<div class="p-6 space-y-6" x-data="{ showBackup: $wire.entangle('showBackupModal') }">
     <div class="flex items-center justify-between">
         <div></div>
         <div>État de poste en {{ $todayFr }}</div>
@@ -141,4 +141,3 @@
         </div>
     </div>
 </div>
--->
