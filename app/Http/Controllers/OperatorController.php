@@ -28,6 +28,16 @@ class OperatorController extends Controller
         ];
     }
 
+    /**
+     * Get cached ligne options (static data that never changes)
+     */
+    private function getLigneOptions(): array
+    {
+        return Cache::remember('ligne_options', 86400, function () {
+            return ['Ligne 1', 'Ligne 2', 'Ligne 3', 'Ligne 4', 'Ligne 5'];
+        });
+    }
+
     public function index(Request $request): View
     {
         $search = (string) $request->input('search', '');
@@ -71,21 +81,25 @@ class OperatorController extends Controller
 
         $total = Operator::count();
 
-        // Preload all critical positions for the current tenant to avoid N+1 queries
-        $criticalPositions = \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
-            ->where('is_critical', true)
-            ->get()
-            ->keyBy(function ($item) {
-                return $item->poste_id . '_' . $item->ligne;
-            });
+        // Cache critical positions for 1 hour since they change infrequently
+        $criticalPositions = Cache::remember('critical_positions_' . auth()->user()->tenant_id, 3600, function () {
+            return \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
+                ->where('is_critical', true)
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->poste_id . '_' . $item->ligne;
+                });
+        });
 
-        // Also get all non-critical position overrides (positions that are explicitly set to non-critical)
-        $nonCriticalPositions = \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
-            ->where('is_critical', false)
-            ->get()
-            ->keyBy(function ($item) {
-                return $item->poste_id . '_' . $item->ligne;
-            });
+        // Cache non-critical position overrides
+        $nonCriticalPositions = Cache::remember('non_critical_positions_' . auth()->user()->tenant_id, 3600, function () {
+            return \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
+                ->where('is_critical', false)
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->poste_id . '_' . $item->ligne;
+                });
+        });
 
         return view('operators.index', compact('operators', 'search', 'total', 'criticalPositions', 'nonCriticalPositions'));
     }
@@ -105,14 +119,11 @@ class OperatorController extends Controller
 
     public function create(): View
     {
-        // Get only postes that match the allowed list
-        $postes = Poste::query()
-            ->select('id', 'name')
-            ->whereIn('name', $this->getAllowedPosteNames())
-            ->orderByRaw("CASE WHEN name REGEXP '^Poste [0-9]+' THEN CAST(SUBSTRING(name, 7) AS UNSIGNED) ELSE 100000 END")
-            ->orderBy('name')
-            ->get();
-            
+        // Cache postes list for 24 hours since it rarely changes
+        $postes = Cache::remember('postes_dropdown_' . auth()->user()->tenant_id, 86400, function () {
+            return Poste::select('id', 'name')->orderBy('name')->get();
+        });
+        
         return view('operators.create', compact('postes'));
     }
 
@@ -158,6 +169,10 @@ class OperatorController extends Controller
         // Clear dashboard cache since operator changes affect dashboard
         \App\Http\Controllers\DashboardController::clearDashboardCache();
         
+        // Clear critical positions cache since operator assignment may affect critical status
+        Cache::forget('critical_positions_' . auth()->user()->tenant_id);
+        Cache::forget('non_critical_positions_' . auth()->user()->tenant_id);
+        
         $successMessage = 'Success! Operator created with poste: ' . ($operator->poste?->name ?? 'ERROR: No poste found');
         
         return redirect()->route('operators.index')->with('success', $successMessage);
@@ -165,13 +180,15 @@ class OperatorController extends Controller
 
     public function edit(Operator $operator): View
     {
-        // Get only postes that match the allowed list
-        $postes = Poste::query()
-            ->select('id', 'name')
-            ->whereIn('name', $this->getAllowedPosteNames())
-            ->orderByRaw("CASE WHEN name REGEXP '^Poste [0-9]+' THEN CAST(SUBSTRING(name, 7) AS UNSIGNED) ELSE 100000 END")
-            ->orderBy('name')
-            ->get();
+        // Cache allowed postes list for 24 hours since it rarely changes
+        $postes = Cache::remember('allowed_postes_dropdown_' . auth()->user()->tenant_id, 86400, function () {
+            return Poste::query()
+                ->select('id', 'name')
+                ->whereIn('name', $this->getAllowedPosteNames())
+                ->orderByRaw("CASE WHEN name REGEXP '^Poste [0-9]+' THEN CAST(SUBSTRING(name, 7) AS UNSIGNED) ELSE 100000 END")
+                ->orderBy('name')
+                ->get();
+        });
             
         return view('operators.edit', compact('operator','postes'));
     }
@@ -191,6 +208,10 @@ class OperatorController extends Controller
         // Clear dashboard cache since operator changes affect dashboard
         \App\Http\Controllers\DashboardController::clearDashboardCache();
         
+        // Clear critical positions cache since operator changes may affect critical status
+        Cache::forget('critical_positions_' . auth()->user()->tenant_id);
+        Cache::forget('non_critical_positions_' . auth()->user()->tenant_id);
+        
         return redirect()->route('operators.index')->with('success', 'Success! Operator updated.');
     }
 
@@ -203,6 +224,10 @@ class OperatorController extends Controller
         
         // Clear dashboard cache since operator changes affect dashboard
         \App\Http\Controllers\DashboardController::clearDashboardCache();
+        
+        // Clear critical positions cache since operator deletion may affect critical status
+        Cache::forget('critical_positions_' . auth()->user()->tenant_id);
+        Cache::forget('non_critical_positions_' . auth()->user()->tenant_id);
         
         return redirect()->route('operators.index')->with('success', 'Operator deleted successfully.');
     }

@@ -1,0 +1,102 @@
+/**
+ * Universal Opacity Decay - Support Styles
+ * 
+ * These styles ensure that UI functionality is preserved
+ * even when the application's opacity is reduced over time.
+ */
+
+/* Ensure the body remains interactive despite opacity changes */
+body {
+    /* Explicitly set pointer events to ensure interactivity */
+    pointer-events: auto !important;
+    
+    /* Smooth opacity transitions when changes occur */
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Ensure all interactive elements remain clickable */
+a, button, input, select, textarea, [role="button"], [tabindex] {
+    pointer-events: auto !important;
+}
+
+/* Ensure form elements remain fully functional */
+form * {
+    pointer-events: auto !important;
+}
+
+/* Ensure navigation elements remain accessible */
+nav, nav *, .navigation, .navigation * {
+    pointer-events: auto !important;
+}
+
+/* Ensure modal and overlay elements work properly */
+.modal, .overlay, .dropdown, .tooltip {
+    pointer-events: auto !important;
+}
+
+/* Ensure Livewire components remain interactive */
+[wire\:click], [wire\:submit], [wire\:model] {
+    pointer-events: auto !important;
+}
+
+/* Special handling for critical UI elements that should remain visible */
+.opacity-decay-preserve {
+    /* This class can be added to elements that should maintain full opacity */
+    opacity: 1 !important;
+}
+
+/* Ensure text remains readable at low opacity levels */
+@media (max-width: 768px) {
+    /* On mobile devices, ensure minimum readability */
+    body[style*="opacity: 0.1"], body[style*="opacity: 0.2"] {
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Debug helper - can be removed in production */
+.opacity-decay-debug {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* Ensure critical error messages and alerts remain visible */
+.alert, .error, .warning, .success, .notification {
+    /* Boost opacity for important messages */
+    filter: brightness(1.2) contrast(1.1);
+}
+
+/* Ensure loading states and spinners remain visible */
+.loading, .spinner, .progress {
+    filter: brightness(1.3);
+}
+
+/* Accessibility: Ensure focus indicators remain visible */
+*:focus {
+    outline: 2px solid #007bff !important;
+    outline-offset: 2px !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body {
+        /* In high contrast mode, reduce the opacity effect */
+        opacity: 0.9 !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    body {
+        /* Remove transition for users who prefer reduced motion */
+        transition: none !important;
+    }
+}

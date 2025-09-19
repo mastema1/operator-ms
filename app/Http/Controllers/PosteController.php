@@ -62,6 +62,8 @@ class PosteController extends Controller
         
         // Clear cached data when postes are modified
         Cache::forget('postes_list');
+        Cache::forget('postes_dropdown_' . auth()->user()->tenant_id);
+        Cache::forget('allowed_postes_dropdown_' . auth()->user()->tenant_id);
         
         // Clear dashboard cache since poste changes affect dashboard
         \App\Http\Controllers\DashboardController::clearDashboardCache();
@@ -89,6 +91,8 @@ class PosteController extends Controller
         
         // Clear cached data when postes are modified
         Cache::forget('postes_list');
+        Cache::forget('postes_dropdown_' . auth()->user()->tenant_id);
+        Cache::forget('allowed_postes_dropdown_' . auth()->user()->tenant_id);
         
         // Clear dashboard cache since poste changes affect dashboard
         \App\Http\Controllers\DashboardController::clearDashboardCache();
