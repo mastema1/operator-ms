@@ -11,21 +11,39 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Cache;
+use App\Services\DashboardCacheManager;
 
 class OperatorController extends Controller
 {
+    /**
+     * Get the current user's tenant ID safely
+     */
+    private function getCurrentTenantId(): ?int
+    {
+        if (!auth()->check() || !auth()->user()) {
+            return null;
+        }
+        return auth()->user()->tenant_id;
+    }
+
     /**
      * Get the strict list of allowed poste names for operator assignment
      */
     private function getAllowedPosteNames(): array
     {
-        return [
-            'Poste 1', 'Poste 2', 'Poste 3', 'Poste 4', 'Poste 5', 'Poste 6', 'Poste 7', 'Poste 8', 'Poste 9', 'Poste 10',
-            'Poste 11', 'Poste 12', 'Poste 13', 'Poste 14', 'Poste 15', 'Poste 16', 'Poste 17', 'Poste 18', 'Poste 19', 'Poste 20',
-            'Poste 21', 'Poste 22', 'Poste 23', 'Poste 24', 'Poste 25', 'Poste 26', 'Poste 27', 'Poste 28', 'Poste 29', 'Poste 30',
-            'Poste 31', 'Poste 32', 'Poste 33', 'Poste 34', 'Poste 35', 'Poste 36', 'Poste 37', 'Poste 38', 'Poste 39', 'Poste 40',
-            'ABS', 'Bol', 'Bouchon', 'CMC', 'COND', 'FILISTE', 'FILISTE EPS', 'FW', 'Polyvalent', 'Ravitailleur', 'Retouche', 'TAG', 'Team Speaker', 'VISSEUSE'
+        // Generate zero-padded numbered postes dynamically
+        $numberedPostes = [];
+        for ($i = 1; $i <= 40; $i++) {
+            $numberedPostes[] = 'Poste ' . str_pad($i, 2, '0', STR_PAD_LEFT);
+        }
+        
+        // Core named postes
+        $namedPostes = [
+            'ABS', 'Bol', 'Bouchon', 'CMC', 'COND', 'FILISTE', 'FILISTE EPS', 'FW', 
+            'Polyvalent', 'Ravitailleur', 'Retouche', 'TAG', 'Team Speaker', 'VISSEUSE', 'Goullote'
         ];
+        
+        return array_merge($numberedPostes, $namedPostes);
     }
 
     /**
@@ -33,7 +51,7 @@ class OperatorController extends Controller
      */
     private function getLigneOptions(): array
     {
-        return Cache::remember('ligne_options', 86400, function () {
+        return Cache::remember('ligne_options', 300, function () { // 5 minutes - ligne options rarely change
             return ['Ligne 1', 'Ligne 2', 'Ligne 3', 'Ligne 4', 'Ligne 5'];
         });
     }
@@ -71,7 +89,7 @@ class OperatorController extends Controller
                           ->from('critical_positions')
                           ->whereColumn('critical_positions.poste_id', 'operators.poste_id')
                           ->whereColumn('critical_positions.ligne', 'operators.ligne')
-                          ->where('critical_positions.tenant_id', auth()->user()->tenant_id)
+                          ->where('critical_positions.tenant_id', auth()->check() && auth()->user() ? auth()->user()->tenant_id : 0)
                           ->where('critical_positions.is_critical', true);
                 });
             })
@@ -82,24 +100,30 @@ class OperatorController extends Controller
         $total = Operator::count();
 
         // Cache critical positions for 1 hour since they change infrequently
-        $criticalPositions = Cache::remember('critical_positions_' . auth()->user()->tenant_id, 3600, function () {
-            return \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
-                ->where('is_critical', true)
-                ->get()
-                ->keyBy(function ($item) {
-                    return $item->poste_id . '_' . $item->ligne;
-                });
-        });
+        $tenantId = $this->getCurrentTenantId();
+        $criticalPositions = collect();
+        $nonCriticalPositions = collect();
+        
+        if ($tenantId) {
+            $criticalPositions = Cache::remember('critical_positions_' . $tenantId, 3, function () use ($tenantId) { // 3 seconds for real-time updates
+                return \App\Models\CriticalPosition::where('tenant_id', $tenantId)
+                    ->where('is_critical', true)
+                    ->get()
+                    ->keyBy(function ($item) {
+                        return $item->poste_id . '_' . $item->ligne;
+                    });
+            });
 
-        // Cache non-critical position overrides
-        $nonCriticalPositions = Cache::remember('non_critical_positions_' . auth()->user()->tenant_id, 3600, function () {
-            return \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
-                ->where('is_critical', false)
-                ->get()
-                ->keyBy(function ($item) {
-                    return $item->poste_id . '_' . $item->ligne;
-                });
-        });
+            // Cache non-critical position overrides
+            $nonCriticalPositions = Cache::remember('non_critical_positions_' . $tenantId, 3, function () use ($tenantId) { // 3 seconds for real-time updates
+                return \App\Models\CriticalPosition::where('tenant_id', $tenantId)
+                    ->where('is_critical', false)
+                    ->get()
+                    ->keyBy(function ($item) {
+                        return $item->poste_id . '_' . $item->ligne;
+                    });
+            });
+        }
 
         return view('operators.index', compact('operators', 'search', 'total', 'criticalPositions', 'nonCriticalPositions'));
     }
@@ -107,7 +131,7 @@ class OperatorController extends Controller
     public function apiIndex(): JsonResponse
     {
         // Cache operators list for 1 hour since it rarely changes
-        $operators = Cache::remember('operators_api_list', 3600, function () {
+        $operators = Cache::remember('operators_api_list', 3, function () { // 3 seconds for real-time updates
             return Operator::select('id', 'first_name', 'last_name', 'ligne')
                 ->orderBy('first_name')
                 ->orderBy('last_name')
@@ -119,10 +143,15 @@ class OperatorController extends Controller
 
     public function create(): View
     {
-        // Cache postes list for 24 hours since it rarely changes
-        $postes = Cache::remember('postes_dropdown_' . auth()->user()->tenant_id, 86400, function () {
-            return Poste::select('id', 'name')->orderBy('name')->get();
-        });
+        // Cache postes list for 24 hours since it rarely changes - now with Golden Order sorting
+        $tenantId = $this->getCurrentTenantId();
+        $postes = collect();
+        
+        if ($tenantId) {
+            $postes = Cache::remember('postes_dropdown_golden_order_' . $tenantId, 300, function () { // 5 minutes - postes change less frequently
+                return Poste::getForDropdownInGoldenOrder();
+            });
+        }
         
         return view('operators.create', compact('postes'));
     }
@@ -135,8 +164,11 @@ class OperatorController extends Controller
         \Log::info('Creating operator with data:', $validatedData);
         
         // Ensure tenant_id is set for the operator
-        if (auth()->check() && auth()->user()->tenant_id) {
-            $validatedData['tenant_id'] = auth()->user()->tenant_id;
+        $tenantId = $this->getCurrentTenantId();
+        if ($tenantId) {
+            $validatedData['tenant_id'] = $tenantId;
+        } else {
+            return redirect()->back()->withErrors(['error' => 'User not authenticated or no tenant assigned.'])->withInput();
         }
         
         // Verify the poste exists and belongs to the current tenant
@@ -162,16 +194,8 @@ class OperatorController extends Controller
             'tenant_id' => $operator->tenant_id
         ]);
         
-        // Clear all related caches when operators are modified
-        Cache::forget('operators_api_list');
-        Cache::forget('postes_list');
-        
-        // Clear dashboard cache since operator changes affect dashboard
-        \App\Http\Controllers\DashboardController::clearDashboardCache();
-        
-        // Clear critical positions cache since operator assignment may affect critical status
-        Cache::forget('critical_positions_' . auth()->user()->tenant_id);
-        Cache::forget('non_critical_positions_' . auth()->user()->tenant_id);
+        // Clear all related caches when operators are modified using centralized cache manager
+        DashboardCacheManager::clearOnOperatorChange();
         
         $successMessage = 'Success! Operator created with poste: ' . ($operator->poste?->name ?? 'ERROR: No poste found');
         
@@ -180,15 +204,21 @@ class OperatorController extends Controller
 
     public function edit(Operator $operator): View
     {
-        // Cache allowed postes list for 24 hours since it rarely changes
-        $postes = Cache::remember('allowed_postes_dropdown_' . auth()->user()->tenant_id, 86400, function () {
-            return Poste::query()
-                ->select('id', 'name')
-                ->whereIn('name', $this->getAllowedPosteNames())
-                ->orderByRaw("CASE WHEN name REGEXP '^Poste [0-9]+' THEN CAST(SUBSTRING(name, 7) AS UNSIGNED) ELSE 100000 END")
-                ->orderBy('name')
-                ->get();
-        });
+        // Cache allowed postes list for 24 hours since it rarely changes - now with Golden Order sorting
+        $tenantId = $this->getCurrentTenantId();
+        $postes = collect();
+        
+        if ($tenantId) {
+            $postes = Cache::remember('allowed_postes_dropdown_golden_order_' . $tenantId, 300, function () { // 5 minutes - postes change less frequently
+                // Get all postes for tenant, then filter by allowed names and apply Golden Order
+                $allPostes = Poste::getForDropdownInGoldenOrder();
+                $allowedNames = $this->getAllowedPosteNames();
+                
+                return $allPostes->filter(function ($poste) use ($allowedNames) {
+                    return in_array($poste->name, $allowedNames);
+                });
+            });
+        }
             
         return view('operators.edit', compact('operator','postes'));
     }
@@ -202,15 +232,8 @@ class OperatorController extends Controller
             $operator->setCriticalPosition((bool)$request->is_critical);
         }
         
-        // Clear cached data when operators are modified
-        Cache::forget('operators_api_list');
-        
-        // Clear dashboard cache since operator changes affect dashboard
-        \App\Http\Controllers\DashboardController::clearDashboardCache();
-        
-        // Clear critical positions cache since operator changes may affect critical status
-        Cache::forget('critical_positions_' . auth()->user()->tenant_id);
-        Cache::forget('non_critical_positions_' . auth()->user()->tenant_id);
+        // Clear all related caches when operators are modified using centralized cache manager
+        DashboardCacheManager::clearOnOperatorChange();
         
         return redirect()->route('operators.index')->with('success', 'Success! Operator updated.');
     }
@@ -219,15 +242,8 @@ class OperatorController extends Controller
     {
         $operator->delete();
         
-        // Clear cached data when operators are modified
-        Cache::forget('operators_api_list');
-        
-        // Clear dashboard cache since operator changes affect dashboard
-        \App\Http\Controllers\DashboardController::clearDashboardCache();
-        
-        // Clear critical positions cache since operator deletion may affect critical status
-        Cache::forget('critical_positions_' . auth()->user()->tenant_id);
-        Cache::forget('non_critical_positions_' . auth()->user()->tenant_id);
+        // Clear all related caches when operators are modified using centralized cache manager
+        DashboardCacheManager::clearOnOperatorChange();
         
         return redirect()->route('operators.index')->with('success', 'Operator deleted successfully.');
     }

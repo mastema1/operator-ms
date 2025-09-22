@@ -66,5 +66,8 @@ class CriticalPosition extends Model
     {
         $position = self::getOrCreate($posteId, $ligne, $tenantId);
         $position->update(['is_critical' => $isCritical]);
+        
+        // Clear dashboard cache immediately when critical positions change
+        \App\Services\DashboardCacheManager::clearDashboardCache($tenantId);
     }
 }

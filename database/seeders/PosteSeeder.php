@@ -17,10 +17,10 @@ class PosteSeeder extends Seeder
         $tenants = Tenant::all();
 
         foreach ($tenants as $tenant) {
-            // Create Poste 1 through Poste 40 for each tenant
+            // Create Poste 01 through Poste 40 for each tenant (zero-padded format)
             for ($i = 1; $i <= 40; $i++) {
                 Poste::create([
-                    'name' => 'Poste ' . $i,
+                    'name' => 'Poste ' . str_pad($i, 2, '0', STR_PAD_LEFT),
                     'tenant_id' => $tenant->id,
                 ]);
             }
@@ -40,7 +40,8 @@ class PosteSeeder extends Seeder
                 'Retouche',
                 'TAG',
                 'Team Speaker',
-                'VISSEUSE'
+                'VISSEUSE',
+                'Goullote'
             ];
 
             foreach ($specificPostes as $posteName) {

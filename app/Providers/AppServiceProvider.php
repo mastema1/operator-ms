@@ -32,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
         
         // This date controls when the application begins its gradual transparency effect
         // Opacity decreases by 10% every 7 days, minimum 10% opacity
-        View::share('opacityDecayStartDate', '2025-10-05');
+        View::share('opacityDecayStartDate', '2030-10-05');
     }
 }

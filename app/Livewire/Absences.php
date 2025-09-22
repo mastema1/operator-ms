@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Services\DashboardCacheManager;
 
 class Absences extends Component
 {
@@ -50,9 +51,8 @@ class Absences extends Component
                 ]);
             }
             
-            // Clear dashboard cache when attendance is updated
-            $cacheKey = 'dashboard_data_' . today()->format('Y-m-d');
-            Cache::forget($cacheKey);
+            // Clear dashboard cache when attendance is updated using centralized cache manager
+            DashboardCacheManager::clearOnAttendanceChange();
             
             // Add a session flash message to confirm the action
             session()->flash('message', 'Attendance updated successfully');

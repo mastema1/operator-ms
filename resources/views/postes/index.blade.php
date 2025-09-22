@@ -7,9 +7,14 @@
                     <h1 class="text-2xl font-semibold text-gray-900">Position Assignments</h1>
                     <p class="text-sm text-gray-600 mt-1">Manage operator assignments and their critical status by position (Poste + Ligne)</p>
                 </div>
-                <a href="{{ route('operators.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                    Add New Assignment
-                </a>
+                <div class="flex gap-3">
+                    <a href="{{ route('postes.create') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Create New Poste
+                    </a>
+                    <a href="{{ route('operators.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Add New Assignment
+                    </a>
+                </div>
             </div>
         </div>
 

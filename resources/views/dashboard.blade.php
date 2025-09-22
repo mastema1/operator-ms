@@ -1,9 +1,23 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Postes critiques EGR ICE1</h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h1 id="dashboard-title" 
+                class="font-semibold text-xl text-gray-800 leading-tight inline-editable-title" 
+                data-inline-edit="title"
+                data-api-url="{{ route('api.dashboard.title.update') }}"
+                data-max-length="255"
+                data-min-length="1"
+                data-placeholder="Enter dashboard title..."
+                data-show-edit-icon="true"
+                title="Click to edit dashboard title">{{ $dashboardTitle }}</h1>
+        </div>
     </x-slot>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Inline Edit Title JavaScript -->
+    <script src="{{ asset('js/inline-edit-title.js') }}"></script>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -50,8 +64,8 @@
             <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Critical Posts Assignment</h3>
                 
-                {{-- TEMPORARY: Static test table for demonstration - REMOVE WHEN REVERTING --}}
-                @if(false) {{-- Change to false to revert to dynamic table --}}
+                {{-- TEMPORARY: Static test table for demonstration - REMOVED --}}
+                @if(false) {{-- Disabled static table --}}
                     <div class="max-h-80 overflow-y-auto overflow-x-auto">
                         <table class="w-full text-left">
                             <thead>
@@ -272,7 +286,7 @@
                             </tbody>
                         </table>
                     </div>
-                {{-- ORIGINAL DYNAMIC TABLE - HIDDEN FOR TESTING --}}
+                {{-- DYNAMIC TABLE WITH STATUS TAGS --}}
                 @elseif($criticalPostesWithOperators->count() > 0)
                     <div class="max-h-80 overflow-y-auto overflow-x-auto">
                         <table class="w-full text-left">
@@ -286,8 +300,22 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {{-- DEBUG: Show assignment data --}}
+                                @if(app()->environment('local'))
+                                    <!-- DEBUG: Total assignments: {{ $criticalPostesWithOperators->count() }} -->
+                                    @foreach($criticalPostesWithOperators as $index => $assignment)
+                                        @if(isset($assignment['occupation_type']) && $assignment['occupation_type'] === 'backup')
+                                            <!-- DEBUG: Backup assignment found at index {{ $index }}: {{ $assignment['poste_name'] }} on {{ $assignment['ligne'] }} -->
+                                        @endif
+                                    @endforeach
+                                @endif
                                 @foreach($criticalPostesWithOperators as $assignment)
-                                    <tr class="border-b border-gray-100 {{ $assignment['is_non_occupe'] ? 'bg-red-50 border-red-300 hover:bg-red-100' : 'hover:bg-gray-50' }}">
+                                    <tr class="border-b border-gray-100 {{ 
+                                        $assignment['is_non_occupe'] ? 'bg-red-50 border-red-300 hover:bg-red-100' : 
+                                        (isset($assignment['urgency_level']) && $assignment['urgency_level'] === 3 ? 'bg-red-50 border-red-200 hover:bg-red-100' :
+                                        (isset($assignment['urgency_level']) && $assignment['urgency_level'] === 2 ? 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100' : 
+                                        'hover:bg-gray-50'))
+                                    }}">
                                         <td class="p-3 text-sm text-gray-800 relative">
                                             @if($assignment['is_non_occupe'])
                                                 <div class="flex items-center">
@@ -299,18 +327,42 @@
                                             @endif
                                         </td>
                                         <td class="p-3 text-sm text-gray-800 relative">
-                                            <div class="flex items-center">
+                                            <div class="flex items-center space-x-2">
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $assignment['is_non_occupe'] ? 'bg-red-200 text-gray-800 border border-red-300' : 'bg-red-100 text-gray-800' }}">
                                                     {{ $assignment['poste_name'] }}
                                                 </span>
-                                                @if($assignment['is_non_occupe'])
-                                                    <span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-red-600 border border-orange-200">
-                                                        URGENT
+                                                
+                                                {{-- Dynamic Status Tags --}}
+                                                @if(isset($assignment['status_tag']) && isset($assignment['status_class']))
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold {{ $assignment['status_class'] }}">
+                                                        {{ $assignment['status_tag'] }}
+                                                        @if($assignment['status_tag'] === 'URGENT')
+                                                            <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        @elseif($assignment['status_tag'] === 'COVERED')
+                                                            <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M9 12a1 1 0 102 0V8a1 1 0 10-2 0v4zm1-7a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        @else
+                                                            <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        @endif
                                                     </span>
                                                 @endif
+                                                
                                             </div>
                                         </td>
-                                        <td class="p-3 text-sm text-gray-800 font-medium">{{ $assignment['operator_name'] }}</td>
+                                        <td class="p-3 text-sm text-gray-800 font-medium">
+                                            @if(isset($assignment['occupation_type']) && $assignment['occupation_type'] === 'backup')
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    {{ $assignment['operator_name'] }}
+                                                </span>
+                                            @else
+                                                {{ $assignment['operator_name'] }}
+                                            @endif
+                                        </td>
                                         <td class="p-3 text-sm text-gray-800 relative">
                                             <div class="flex items-center">
                                                 @if($assignment['is_present'])
@@ -323,7 +375,7 @@
                                             </div>
                                         </td>
                                         <td class="p-3 text-sm text-gray-800 relative">
-                                            <div class="backup-assignment-container" data-poste-id="{{ $assignment['poste_id'] }}">
+                                            <div class="backup-assignment-container" data-poste-id="{{ $assignment['poste_id'] }}" data-operator-id="{{ $assignment['operator_id'] ?? '' }}">
                                                 @if(count($assignment['backup_assignments']) == 0)
                                                     <!-- State 1: No backups assigned -->
                                                     <button onclick="openBackupAssignment(this, {{ $loop->index }})" class="inline-flex items-center px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-800 rounded-md text-xs font-medium transition-colors duration-200">
@@ -570,8 +622,19 @@
             
             operatorList.innerHTML = '<div class="text-center py-2 text-gray-500">Loading...</div>';
             
+            // Get operator ID from the current row's backup assignment container
+            const row = document.querySelector(`#backup-popover-${rowIndex}`).closest('tr');
+            const container = row.querySelector('[data-operator-id]');
+            const operatorId = container ? container.dataset.operatorId : null;
+            
+            if (!operatorId) {
+                console.error('Could not find operator ID for row:', rowIndex);
+                operatorList.innerHTML = '<div class="text-center py-2 text-red-500">Error: No operator ID found</div>';
+                return;
+            }
+            
             // Fetch available operators from API
-            fetch('/api/backup-assignments/available-operators', {
+            fetch(`/api/backup-assignments/available-operators?operator_id=${operatorId}`, {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -634,21 +697,23 @@
         function selectOperator(operator, rowIndex, slot) {
             console.log('selectOperator called:', {operator, rowIndex, slot});
             
-            // Get poste ID from the current row's backup assignment container
+            // Get both poste ID and operator ID from the current row's backup assignment container
             const row = document.querySelector(`#backup-popover-${rowIndex}`).closest('tr');
             const container = row.querySelector('[data-poste-id]');
             const posteId = container ? container.dataset.posteId : null;
+            const operatorId = container ? container.dataset.operatorId : null;
             
-            console.log('Found posteId:', posteId);
+            console.log('Found posteId:', posteId, 'operatorId:', operatorId);
             console.log('Request payload:', {
                 poste_id: posteId,
-                operator_id: operator.id,
+                operator_id: operatorId,
+                backup_operator_id: operator.id,
                 backup_slot: slot,
                 assigned_date: new Date().toISOString().split('T')[0]
             });
             
-            if (!posteId) {
-                alert('Error: Could not find poste ID');
+            if (!posteId || !operatorId) {
+                alert('Error: Could not find poste ID or operator ID');
                 return;
             }
             
@@ -662,7 +727,8 @@
                 },
                 body: JSON.stringify({
                     poste_id: posteId,
-                    operator_id: operator.id,
+                    operator_id: operatorId,
+                    backup_operator_id: operator.id,
                     backup_slot: slot,
                     assigned_date: new Date().toISOString().split('T')[0]
                 })
@@ -724,9 +790,9 @@
                 return;
             }
             
-            // Fetch current assignments for this poste to rebuild the UI
-            const posteId = container.dataset.posteId;
-            fetch(`/api/backup-assignments/poste/${posteId}`, {
+            // Fetch current assignment for this operator to rebuild the UI
+            const operatorId = container.dataset.operatorId;
+            fetch(`/api/backup-assignments/operator/${operatorId}`, {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -737,9 +803,11 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    rebuildBackupAssignmentContainer(container, data.assignments, rowIndex);
+                    // Convert single assignment to array format for consistency
+                    const assignments = data.assignment ? [data.assignment] : [];
+                    rebuildBackupAssignmentContainer(container, assignments, rowIndex);
                     // Also update the side panel backup slots
-                    updateBackupSidePanel(rowIndex, data.assignments);
+                    updateBackupSidePanel(rowIndex, assignments);
                 }
             })
             .catch(error => {

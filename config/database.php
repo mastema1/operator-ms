@@ -59,7 +59,21 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                // Performance optimizations for concurrent connections
+                PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', false),
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET sql_mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'",
             ]) : [],
+            // Connection pool settings for better concurrency
+            'pool' => [
+                'min_connections' => env('DB_POOL_MIN', 5),
+                'max_connections' => env('DB_POOL_MAX', 50),
+                'acquire_timeout' => env('DB_POOL_TIMEOUT', 60),
+                'timeout' => env('DB_TIMEOUT', 60),
+                'idle_timeout' => env('DB_IDLE_TIMEOUT', 600),
+                'lifetime' => env('DB_LIFETIME', 3600),
+            ],
         ],
 
         'mariadb' => [

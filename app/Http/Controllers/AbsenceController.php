@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\Operator;
+use App\Services\DashboardCacheManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -47,6 +48,9 @@ class AbsenceController extends Controller
         
         $attendance->status = $attendance->exists && $attendance->status === 'absent' ? 'present' : 'absent';
         $attendance->save();
+
+        // Clear dashboard cache immediately when attendance changes
+        DashboardCacheManager::clearOnAttendanceChange();
 
         $isAbsent = $attendance->status === 'absent';
         

@@ -8,6 +8,7 @@ use App\Models\Poste;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use App\Services\DashboardCacheManager;
 
 class BackupAssignmentController extends Controller
 {
@@ -18,28 +19,29 @@ class BackupAssignmentController extends Controller
         $request->validate([
             'poste_id' => 'required|exists:postes,id',
             'operator_id' => 'required|exists:operators,id',
+            'backup_operator_id' => 'required|exists:operators,id',
             'backup_slot' => 'required|integer|in:1'
         ]);
 
         try {
             \Log::info('Using updateOrCreate method');
             
-            // Delete any existing backup assignment for this poste (single backup only)
-            BackupAssignment::where('poste_id', $request->poste_id)
+            // Delete any existing backup assignment for this specific operator (single backup only)
+            BackupAssignment::where('operator_id', $request->operator_id)
                 ->whereDate('assigned_date', today())
                 ->delete();
             
             // Create new assignment
             $assignment = BackupAssignment::create([
                 'poste_id' => $request->poste_id,
-                'backup_operator_id' => $request->operator_id,
+                'operator_id' => $request->operator_id,
+                'backup_operator_id' => $request->backup_operator_id,
                 'backup_slot' => $request->backup_slot,
                 'assigned_date' => today()
             ]);
 
-            // Clear dashboard cache
-            $cacheKey = 'dashboard_data_' . today()->format('Y-m-d');
-            Cache::forget($cacheKey);
+            // Clear dashboard cache using centralized cache manager
+            DashboardCacheManager::clearOnBackupChange();
 
             // Load the operator relationship
             $assignment->load('backupOperator:id,first_name,last_name');
@@ -65,9 +67,8 @@ class BackupAssignmentController extends Controller
             $assignment = BackupAssignment::findOrFail($assignmentId);
             $assignment->delete();
 
-            // Clear dashboard cache
-            $cacheKey = 'dashboard_data_' . today()->format('Y-m-d');
-            Cache::forget($cacheKey);
+            // Clear dashboard cache using centralized cache manager
+            DashboardCacheManager::clearOnBackupChange();
 
             return response()->json(['success' => true]);
 
@@ -78,18 +79,15 @@ class BackupAssignmentController extends Controller
 
     public function getAvailableOperators(Request $request): JsonResponse
     {
-        $posteId = $request->get('poste_id');
+        $operatorId = $request->get('operator_id'); // The operator being replaced
         $search = $request->get('search', '');
 
-        // Get operators not already assigned as backup for this poste today
-        $assignedOperatorIds = BackupAssignment::where('poste_id', $posteId)
-            ->whereDate('assigned_date', today())
+        // Get operators already assigned as backup operators today
+        $assignedOperatorIds = BackupAssignment::whereDate('assigned_date', today())
             ->pluck('backup_operator_id');
 
-        // Also exclude the primary operator(s) assigned to this poste
-        $primaryOperatorIds = Operator::where('poste_id', $posteId)->pluck('id');
-
-        $excludedIds = $assignedOperatorIds->merge($primaryOperatorIds);
+        // Exclude the specific operator being replaced and any already assigned backup operators
+        $excludedIds = $assignedOperatorIds->push($operatorId);
 
         $operators = Operator::whereNotIn('id', $excludedIds)
             ->when($search, function ($query) use ($search) {
@@ -107,30 +105,32 @@ class BackupAssignmentController extends Controller
         return response()->json($operators);
     }
 
-    public function getPosteAssignments(Request $request, $posteId): JsonResponse
+    public function getOperatorAssignment(Request $request, $operatorId): JsonResponse
     {
         try {
-            $assignments = BackupAssignment::where('poste_id', $posteId)
+            $assignment = BackupAssignment::where('operator_id', $operatorId)
                 ->whereDate('assigned_date', today())
                 ->with('backupOperator:id,first_name,last_name')
-                ->orderBy('backup_slot')
-                ->get()
-                ->map(function ($assignment) {
-                    return [
-                        'id' => $assignment->id,
-                        'slot' => $assignment->backup_slot,
-                        'operator_name' => $assignment->backupOperator->first_name . ' ' . $assignment->backupOperator->last_name,
-                        'operator_id' => $assignment->backup_operator_id
-                    ];
-                });
+                ->first();
+
+            if ($assignment) {
+                $assignmentData = [
+                    'id' => $assignment->id,
+                    'slot' => $assignment->backup_slot,
+                    'operator_name' => $assignment->backupOperator->first_name . ' ' . $assignment->backupOperator->last_name,
+                    'operator_id' => $assignment->backup_operator_id
+                ];
+            } else {
+                $assignmentData = null;
+            }
 
             return response()->json([
                 'success' => true,
-                'assignments' => $assignments
+                'assignment' => $assignmentData
             ]);
 
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch assignments: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Failed to fetch assignment: ' . $e->getMessage()], 500);
         }
     }
 }

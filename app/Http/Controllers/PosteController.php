@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePosteRequest;
 use App\Http\Requests\UpdatePosteRequest;
 use App\Models\Poste;
+use App\Services\DashboardCacheManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -12,6 +13,17 @@ use Illuminate\Support\Facades\Cache;
 
 class PosteController extends Controller
 {
+    /**
+     * Get the current user's tenant ID safely
+     */
+    private function getCurrentTenantId(): ?int
+    {
+        if (!auth()->check() || !auth()->user()) {
+            return null;
+        }
+        return auth()->user()->tenant_id;
+    }
+
     public function index(Request $request): View
     {
         $search = (string) $request->input('search', '');
@@ -41,12 +53,17 @@ class PosteController extends Controller
         $total = \App\Models\Poste::count();
 
         // Preload critical positions for display
-        $criticalPositions = \App\Models\CriticalPosition::where('tenant_id', auth()->user()->tenant_id)
-            ->where('is_critical', true)
-            ->get()
-            ->keyBy(function ($item) {
-                return $item->poste_id . '_' . $item->ligne;
-            });
+        $tenantId = $this->getCurrentTenantId();
+        $criticalPositions = collect();
+        
+        if ($tenantId) {
+            $criticalPositions = \App\Models\CriticalPosition::where('tenant_id', $tenantId)
+                ->where('is_critical', true)
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->poste_id . '_' . $item->ligne;
+                });
+        }
 
         return view('postes.index', compact('postes', 'search', 'total', 'criticalPositions'));
     }
@@ -62,11 +79,14 @@ class PosteController extends Controller
         
         // Clear cached data when postes are modified
         Cache::forget('postes_list');
-        Cache::forget('postes_dropdown_' . auth()->user()->tenant_id);
-        Cache::forget('allowed_postes_dropdown_' . auth()->user()->tenant_id);
+        $tenantId = $this->getCurrentTenantId();
+        if ($tenantId) {
+            Cache::forget('postes_dropdown_' . $tenantId);
+            Cache::forget('allowed_postes_dropdown_' . $tenantId);
+        }
         
         // Clear dashboard cache since poste changes affect dashboard
-        \App\Http\Controllers\DashboardController::clearDashboardCache();
+        DashboardCacheManager::clearOnPosteChange();
         
         return redirect()->route('postes.index')->with('success', 'Success! Poste created.');
     }
@@ -91,11 +111,14 @@ class PosteController extends Controller
         
         // Clear cached data when postes are modified
         Cache::forget('postes_list');
-        Cache::forget('postes_dropdown_' . auth()->user()->tenant_id);
-        Cache::forget('allowed_postes_dropdown_' . auth()->user()->tenant_id);
+        $tenantId = $this->getCurrentTenantId();
+        if ($tenantId) {
+            Cache::forget('postes_dropdown_' . $tenantId);
+            Cache::forget('allowed_postes_dropdown_' . $tenantId);
+        }
         
         // Clear dashboard cache since poste changes affect dashboard
-        \App\Http\Controllers\DashboardController::clearDashboardCache();
+        DashboardCacheManager::clearOnPosteChange();
         
         return redirect()->route('postes.index')->with('success', 'Poste deleted successfully.');
     }

@@ -1,0 +1,983 @@
+{
+  "sheets": [
+    {
+      "name": "Instructions & Overview",
+      "data": [
+        [
+          "The Hybrid Athlete Program - Overview"
+        ],
+        [
+          ""
+        ],
+        [
+          "User:",
+          "23 Year Old Male, 69kg, 178cm"
+        ],
+        [
+          "Goal:",
+          "Build Extreme Endurance & Functional Strength"
+        ],
+        [
+          ""
+        ],
+        [
+          "Key Principles - READ FIRST"
+        ],
+        [
+          "1. Progressive Overload:",
+          "The most important rule. Each week, you must aim to do more than the last. This can be lifting 1-2kg more, doing one more rep, or one more set. Track everything in the 'Progress Tracker' tab."
+        ],
+        [
+          "2. Finding Your Starting Weight (RIR):",
+          "For each exercise, find a weight that leaves you with 1-2 Reps In Reserve (RIR). This means at the end of the set, you feel you could have done 1-2 more perfect reps, but no more."
+        ],
+        [
+          "3. Tempo is CRUCIAL:",
+          "The speed of your reps changes with the goal. The 'Tempo' column in each block is a critical instruction. Don't ignore it."
+        ],
+        [
+          "4. Form Over Everything:",
+          "Never sacrifice good form to lift a heavier weight. A lighter weight with perfect form is always better and safer."
+        ],
+        [
+          "5. Deload Weeks:",
+          "Between each 4-week block, take a deload week. Do the same workouts but with 50-60% of your usual weight. This is essential for recovery and long-term progress."
+        ],
+        [
+          "6. Consistency:",
+          "This plan only works if you stick to it. Consistency is more important than intensity."
+        ]
+      ],
+      "merges": [
+        "A1:B1",
+        "A6:B6"
+      ],
+      "styles": [
+        {
+          "range": "A1:B1",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 16
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        },
+        {
+          "range": "A3:A4",
+          "style": {
+            "font": {
+              "bold": true
+            }
+          }
+        },
+        {
+          "range": "A6:B6",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 14
+            },
+            "fill": {
+              "fgColor": "FFFF00"
+            }
+          }
+        },
+        {
+          "range": "A7:A12",
+          "style": {
+            "font": {
+              "bold": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Block 1 - Hypertrophy (Wk 1-4)",
+      "data": [
+        [
+          "Block 1: Hypertrophy & Aerobic Foundation (Weeks 1-4)"
+        ],
+        [
+          "Goal: Increase muscle mass and work capacity. This is the foundation."
+        ],
+        [
+          ""
+        ],
+        [
+          "Day",
+          "Workout Focus",
+          "Exercise",
+          "Sets",
+          "Reps",
+          "Tempo",
+          "Rest (sec)"
+        ],
+        [
+          "1",
+          "Lower Body Hypertrophy",
+          "Barbell Back Squats",
+          4,
+          "8-10",
+          "3 sec lower, 1 sec lift",
+          90
+        ],
+        [
+          "",
+          "",
+          "Romanian Deadlifts",
+          3,
+          "10-12",
+          "3 sec lower, 1 sec lift",
+          60
+        ],
+        [
+          "",
+          "",
+          "Walking Lunges",
+          3,
+          "12 (per leg)",
+          "Controlled",
+          60
+        ],
+        [
+          "",
+          "",
+          "Leg Press",
+          3,
+          "10-15",
+          "2 sec lower, 1 sec lift",
+          60
+        ],
+        [
+          "",
+          "",
+          "Seated Calf Raises",
+          4,
+          15,
+          "1 sec pause at top",
+          45
+        ],
+        [
+          "2",
+          "Upper Body Hypertrophy",
+          "Incline Dumbbell Press",
+          4,
+          "8-12",
+          "3 sec lower, 1 sec lift",
+          75
+        ],
+        [
+          "",
+          "",
+          "Pull-Ups (or Lat Pulldowns)",
+          4,
+          "To Failure (6-10)",
+          "2 sec lower, 1 sec lift",
+          75
+        ],
+        [
+          "",
+          "",
+          "Seated Cable Rows",
+          3,
+          "10-12",
+          "1 sec pause at peak",
+          60
+        ],
+        [
+          "",
+          "",
+          "Dumbbell Shoulder Press",
+          3,
+          "10-12",
+          "2 sec lower, 1 sec lift",
+          60
+        ],
+        [
+          "",
+          "",
+          "Barbell Curls",
+          3,
+          12,
+          "2 sec lower, 1 sec lift",
+          45
+        ],
+        [
+          "",
+          "",
+          "Tricep Pushdowns",
+          3,
+          12,
+          "1 sec pause at peak",
+          45
+        ],
+        [
+          "3",
+          "Active Recovery / LISS",
+          "Zone 2 Cardio",
+          1,
+          "45-60 min",
+          "Conversational Pace",
+          "N/A"
+        ],
+        [
+          "4",
+          "Lower Body Hypertrophy",
+          "Leg Press",
+          4,
+          "10-12",
+          "2 sec lower, 1 sec lift",
+          75
+        ],
+        [
+          "",
+          "",
+          "Barbell Hip Thrusts",
+          3,
+          "8-12",
+          "2 sec pause at top",
+          75
+        ],
+        [
+          "",
+          "",
+          "Leg Extensions",
+          3,
+          15,
+          "1 sec pause at top",
+          60
+        ],
+        [
+          "",
+          "",
+          "Lying Leg Curls",
+          3,
+          15,
+          "1 sec pause at peak",
+          60
+        ],
+        [
+          "",
+          "",
+          "Standing Calf Raises",
+          4,
+          20,
+          "1 sec pause at top",
+          45
+        ],
+        [
+          "5",
+          "Upper Body Hypertrophy",
+          "Flat Barbell Bench Press",
+          4,
+          "8-10",
+          "3 sec lower, 1 sec lift",
+          90
+        ],
+        [
+          "",
+          "",
+          "Bent-Over Barbell Rows",
+          4,
+          "8-10",
+          "1 sec pause at peak",
+          75
+        ],
+        [
+          "",
+          "",
+          "Lateral Raises",
+          4,
+          "12-15",
+          "Slow and controlled",
+          45
+        ],
+        [
+          "",
+          "",
+          "Face Pulls",
+          3,
+          "15-20",
+          "Focus on squeeze",
+          45
+        ],
+        [
+          "",
+          "",
+          "Dumbbell Hammer Curls",
+          3,
+          12,
+          "2 sec lower, 1 sec lift",
+          45
+        ],
+        [
+          "",
+          "",
+          "Overhead Tricep Extensions",
+          3,
+          12,
+          "2 sec lower, 1 sec lift",
+          45
+        ],
+        [
+          "6",
+          "HIIT",
+          "Kettlebell Swings",
+          10,
+          "30s ON, 30s OFF",
+          "Explosive",
+          30
+        ],
+        [
+          "7",
+          "Rest",
+          "Complete Rest",
+          "N/A",
+          "N/A",
+          "N/A",
+          "N/A"
+        ]
+      ],
+      "merges": [
+        "A1:G1",
+        "A2:G2"
+      ],
+      "styles": [
+        {
+          "range": "A1:G1",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 16
+            }
+          }
+        },
+        {
+          "range": "A2:G2",
+          "style": {
+            "font": {
+              "italic": true
+            }
+          }
+        },
+        {
+          "range": "A4:G4",
+          "style": {
+            "font": {
+              "bold": true
+            },
+            "fill": {
+              "fgColor": "D3D3D3"
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Block 2 - Strength (Wk 5-8)",
+      "data": [
+        [
+          "Block 2: Max Strength & Threshold (Weeks 5-8)"
+        ],
+        [
+          "Goal: Convert new muscle into raw strength. Increase lactate threshold."
+        ],
+        [
+          ""
+        ],
+        [
+          "Day",
+          "Workout Focus",
+          "Exercise",
+          "Sets",
+          "Reps",
+          "Tempo",
+          "Rest (sec)"
+        ],
+        [
+          "1",
+          "Lower Body Strength",
+          "Barbell Back Squats",
+          5,
+          5,
+          "Explosive Up, Controlled Down",
+          120
+        ],
+        [
+          "",
+          "",
+          "Good Mornings",
+          3,
+          8,
+          "Slow and Controlled",
+          90
+        ],
+        [
+          "",
+          "",
+          "Heavy Dumbbell Lunges",
+          3,
+          "6-8 (per leg)",
+          "Controlled",
+          90
+        ],
+        [
+          "",
+          "",
+          "Calf Raises",
+          4,
+          "10-15",
+          "1 sec pause at top",
+          60
+        ],
+        [
+          "2",
+          "Upper Body Strength",
+          "Flat Barbell Bench Press",
+          5,
+          5,
+          "Explosive Up, Controlled Down",
+          120
+        ],
+        [
+          "",
+          "",
+          "Weighted Pull-Ups",
+          5,
+          5,
+          "Explosive Up, Controlled Down",
+          120
+        ],
+        [
+          "",
+          "",
+          "Pendlay Rows",
+          4,
+          "6-8",
+          "Explosive",
+          90
+        ],
+        [
+          "",
+          "",
+          "Standing Overhead Press",
+          4,
+          "6-8",
+          "Explosive Up, Controlled Down",
+          90
+        ],
+        [
+          "3",
+          "Active Recovery / LISS",
+          "Zone 2 Cardio",
+          1,
+          "30-45 min",
+          "Conversational Pace",
+          "N/A"
+        ],
+        [
+          "4",
+          "Lower Body Strength",
+          "Barbell Deadlifts",
+          5,
+          "3-5",
+          "Explosive Up, Controlled Down",
+          180
+        ],
+        [
+          "",
+          "",
+          "Front Squats",
+          3,
+          "6-8",
+          "Explosive Up, Controlled Down",
+          120
+        ],
+        [
+          "",
+          "",
+          "Glute-Ham Raises (or Leg Curls)",
+          3,
+          "8-10",
+          "Controlled",
+          75
+        ],
+        [
+          "",
+          "",
+          "Farmer's Walks",
+          3,
+          "40 yards",
+          "As heavy as possible",
+          90
+        ],
+        [
+          "5",
+          "Upper Body Strength",
+          "Weighted Dips",
+          4,
+          "6-8",
+          "Explosive Up, Controlled Down",
+          90
+        ],
+        [
+          "",
+          "",
+          "T-Bar Rows",
+          4,
+          "6-8",
+          "Explosive",
+          90
+        ],
+        [
+          "",
+          "",
+          "Push Press",
+          3,
+          5,
+          "Max Explosiveness",
+          90
+        ],
+        [
+          "",
+          "",
+          "Bicep/Tricep Superset",
+          3,
+          "8-10",
+          "Controlled",
+          60
+        ],
+        [
+          "6",
+          "Threshold Training",
+          "Hill Sprints OR Rower Intervals",
+          "8-10",
+          "15-20s (sprint) / 500m (row)",
+          "Max Effort",
+          "Walk down / 90s rest"
+        ],
+        [
+          "7",
+          "Rest",
+          "Complete Rest",
+          "N/A",
+          "N/A",
+          "N/A",
+          "N/A"
+        ]
+      ],
+      "merges": [
+        "A1:G1",
+        "A2:G2"
+      ],
+      "styles": [
+        {
+          "range": "A1:G1",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 16
+            }
+          }
+        },
+        {
+          "range": "A2:G2",
+          "style": {
+            "font": {
+              "italic": true
+            }
+          }
+        },
+        {
+          "range": "A4:G4",
+          "style": {
+            "font": {
+              "bold": true
+            },
+            "fill": {
+              "fgColor": "D3D3D3"
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Block 3 - Power (Wk 9-12)",
+      "data": [
+        [
+          "Block 3: Power & Performance Peak (Weeks 9-12)"
+        ],
+        [
+          "Goal: Translate strength into explosive power and merge it with high-level endurance."
+        ],
+        [
+          ""
+        ],
+        [
+          "Day",
+          "Workout Focus",
+          "Exercise",
+          "Sets",
+          "Reps",
+          "Tempo",
+          "Rest (sec)"
+        ],
+        [
+          "1",
+          "Full Body Power",
+          "Box Jumps",
+          5,
+          3,
+          "Max Explosiveness",
+          60
+        ],
+        [
+          "",
+          "",
+          "Power Cleans",
+          5,
+          3,
+          "Max Explosiveness",
+          120
+        ],
+        [
+          "",
+          "",
+          "Heavy Sled Pushes",
+          4,
+          "20 yards",
+          "Max Effort",
+          90
+        ],
+        [
+          "",
+          "",
+          "Medicine Ball Slams",
+          3,
+          10,
+          "Max Explosiveness",
+          60
+        ],
+        [
+          "2",
+          "Long Endurance",
+          "Run, Cycle or Hike",
+          1,
+          "75-90 min",
+          "Steady, challenging pace",
+          "N/A"
+        ],
+        [
+          "3",
+          "Active Recovery",
+          "Mobility & Foam Rolling",
+          1,
+          "30-40 min",
+          "Slow and deliberate",
+          "N/A"
+        ],
+        [
+          "4",
+          "Strength & Conditioning",
+          "Front Squats",
+          3,
+          5,
+          "Explosive Up, Controlled Down",
+          90
+        ],
+        [
+          "",
+          "",
+          "Push Press",
+          3,
+          5,
+          "Max Explosiveness",
+          90
+        ],
+        [
+          "",
+          "",
+          "Renegade Rows",
+          3,
+          "8 (per arm)",
+          "Controlled, stable core",
+          75
+        ],
+        [
+          "",
+          "Finisher (MetCon)",
+          "5 Rounds For Time:",
+          5,
+          "",
+          "Fast with good form",
+          "Minimal"
+        ],
+        [
+          "",
+          "",
+          "• 10 Kettlebell Swings",
+          "",
+          10,
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "• 10 Burpees",
+          "",
+          10,
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "• 10 Wall Balls",
+          "",
+          10,
+          "",
+          ""
+        ],
+        [
+          "5",
+          "Active Recovery / LISS",
+          "Zone 2 Cardio",
+          1,
+          "30-45 min",
+          "Easy pace",
+          "N/A"
+        ],
+        [
+          "6",
+          "\"Test Day\" MetCon",
+          "Example: \"Cindy\" AMRAP 20 min:",
+          1,
+          "AMRAP 20",
+          "Consistent Pace",
+          "As needed"
+        ],
+        [
+          "",
+          "",
+          "• 5 Pull-ups",
+          "",
+          5,
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "• 10 Push-ups",
+          "",
+          10,
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "• 15 Air Squats",
+          "",
+          15,
+          "",
+          ""
+        ],
+        [
+          "7",
+          "Rest",
+          "Complete Rest",
+          "N/A",
+          "N/A",
+          "N/A",
+          "N/A"
+        ]
+      ],
+      "merges": [
+        "A1:G1",
+        "A2:G2"
+      ],
+      "styles": [
+        {
+          "range": "A1:G1",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 16
+            }
+          }
+        },
+        {
+          "range": "A2:G2",
+          "style": {
+            "font": {
+              "italic": true
+            }
+          }
+        },
+        {
+          "range": "A4:G4",
+          "style": {
+            "font": {
+              "bold": true
+            },
+            "fill": {
+              "fgColor": "D3D3D3"
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress Tracker",
+      "data": [
+        [
+          "Workout Log"
+        ],
+        [
+          "Instructions: Fill this out for every single workout. The goal is to see the numbers in the 'Weight' and 'Reps' columns increase over time."
+        ],
+        [
+          ""
+        ],
+        [
+          "Date",
+          "Exercise",
+          "Weight (kg)",
+          "Set 1 (Reps)",
+          "Set 2 (Reps)",
+          "Set 3 (Reps)",
+          "Set 4 (Reps)",
+          "Set 5 (Reps)",
+          "Notes (RIR, how it felt, etc.)"
+        ],
+        [
+          "e.g. 22/09/2025",
+          "Barbell Squat",
+          60,
+          10,
+          9,
+          8,
+          8,
+          "",
+          "Last set was RIR 1. Felt strong."
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "merges": [
+        "A1:I1",
+        "A2:I2"
+      ],
+      "styles": [
+        {
+          "range": "A1:I1",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 16
+            }
+          }
+        },
+        {
+          "range": "A2:I2",
+          "style": {
+            "font": {
+              "italic": true
+            }
+          }
+        },
+        {
+          "range": "A4:I4",
+          "style": {
+            "font": {
+              "bold": true
+            },
+            "fill": {
+              "fgColor": "D3D3D3"
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        },
+        {
+          "range": "A5:I5",
+          "style": {
+            "font": {
+              "italic": true
+            },
+            "fontColor": "808080"
+          }
+        }
+      ]
+    }
+  ]
+}

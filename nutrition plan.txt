@@ -1,0 +1,196 @@
+{
+  "sheets": [
+    {
+      "name": "Nutrition Plan (Post-5pm Workout)",
+      "data": [
+        [
+          "Nutrition Plan for Post-5 PM Training"
+        ],
+        [
+          "User: 23M, 69kg, 178cm | Work Schedule: 8am-5pm"
+        ],
+        [
+          ""
+        ],
+        [
+          "Daily Targets"
+        ],
+        [
+          "Calories",
+          "3000-3200 kcal",
+          "Protein",
+          "140-160g"
+        ],
+        [
+          ""
+        ],
+        [
+          "Time",
+          "Phase",
+          "Food Options (Moroccan Focus)",
+          "Purpose / Notes"
+        ],
+        [
+          "07:30",
+          "Workday Fuel Breakfast",
+          "• 3-4 Boiled Eggs (Bidh)\n• 1 piece of Khobz with Olive Oil (Zit Zaytoun)\n• 1 Banana or Orange",
+          "Provides a solid base of protein and slow-release energy to keep you focused and prevent muscle breakdown during the morning."
+        ],
+        [
+          "12:30",
+          "Pre-Workout Power Lunch",
+          "• Large portion of Rice (Arroz) or Potatoes (Batata)\n• With Chicken (Dajaj), Kefta Tagine, or a large bowl of Lentil Stew (Adas).\n• This should be a large, carb-heavy meal.",
+          "This is your main energy load for the workout. The carbs will digest and stock your muscle glycogen stores for maximum power and endurance in the evening."
+        ],
+        [
+          "16:30",
+          "Immediate Workout Fuel",
+          "• 1 Banana\n• A small handful of Peanuts (Kawkaw) or Almonds (Looz).",
+          "A small, fast-digesting snack to top off your energy levels and raise blood sugar right before you head to the gym. Prevents feeling sluggish at the start."
+        ],
+        [
+          "~17:30 to 19:00",
+          "WORKOUT",
+          "Drink plenty of water during your session.",
+          "Focus on performance."
+        ],
+        [
+          "19:30",
+          "Post-Workout Recovery Dinner",
+          "• Your LARGEST meal of the day.\n• A very large portion of Roast Chicken or other protein.\n• A very generous serving of Potatoes or Rice.\n• Side of cooked Vegetables or Salade Marocaine.",
+          "CRITICAL RECOVERY WINDOW. Your muscles are like sponges. The protein starts repair/growth, and the carbs replenish the energy you just burned."
+        ],
+        [
+          "21:30 (Optional)",
+          "Overnight Repair Snack",
+          "• 1 can of Sardines (Sardine)\n• OR 1-2 Boiled Eggs (Bidh)",
+          "Provides slow-digesting protein to fuel muscle repair and prevent muscle breakdown while you sleep. Highly recommended for growth."
+        ],
+        [
+          ""
+        ],
+        [
+          "Key Principles"
+        ],
+        [
+          "Hydration",
+          "Aim for at least 3-4 liters of water throughout the entire day. Don't wait until you're thirsty."
+        ],
+        [
+          "Buy Local",
+          "Your cheapest and best quality ingredients will always be at the local Souk, not the supermarket."
+        ],
+        [
+          "Cook in Bulk",
+          "Make large batches of Adas, Loubia, or roast a whole chicken to cover several meals. This saves time and money."
+        ],
+        [
+          "Listen to Your Body",
+          "If you are losing weight, you are not eating enough. Add more rice, potatoes, or olive oil to your meals to increase calories."
+        ]
+      ],
+      "merges": [
+        "A1:D1",
+        "A2:D2",
+        "A4:D4",
+        "A7:D7",
+        "A15:D15"
+      ],
+      "styles": [
+        {
+          "range": "A1:D2",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 14
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        },
+        {
+          "range": "A4:D4",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 12
+            },
+            "fill": {
+              "fgColor": "90EE90"
+            }
+          }
+        },
+        {
+          "range": "A5:D5",
+          "style": {
+            "font": {
+              "bold": true
+            }
+          }
+        },
+        {
+          "range": "A7:D7",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 12
+            },
+            "fill": {
+              "fgColor": "D3D3D3"
+            },
+            "alignment": {
+              "horizontal": "center"
+            }
+          }
+        },
+        {
+          "range": "A8:B13",
+          "style": {
+            "font": {
+              "bold": true
+            }
+          }
+        },
+        {
+          "range": "C8:D13",
+          "style": {
+            "alignment": {
+              "wrapText": true,
+              "vertical": "top"
+            }
+          }
+        },
+        {
+          "range": "A15:D15",
+          "style": {
+            "font": {
+              "bold": true,
+              "size": 12
+            },
+            "fill": {
+              "fgColor": "FFFF00"
+            }
+          }
+        },
+        {
+          "range": "A16:A19",
+          "style": {
+            "font": {
+              "bold": true
+            }
+          }
+        },
+        {
+          "range": "B16:B19",
+          "style": {
+            "alignment": {
+              "wrapText": true,
+              "vertical": "top"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

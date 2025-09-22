@@ -14,7 +14,7 @@ class OpacityDecayManager {
         this.startDate = new Date(startDateString);
         this.decayRate = 0.10; // 10% decrease
         this.decayInterval = 7; // Every 7 days
-        this.minimumOpacity = 0.10; // Never go below 10%
+        this.minimumOpacity = 0; // Never go below 10%
         this.maximumOpacity = 1.0; // Start at 100%
         
         this.init();

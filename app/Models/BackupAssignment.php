@@ -11,6 +11,7 @@ class BackupAssignment extends Model
     use BelongsToTenant;
     protected $fillable = [
         'poste_id',
+        'operator_id',
         'backup_operator_id',
         'backup_slot',
         'assigned_date',
@@ -24,6 +25,11 @@ class BackupAssignment extends Model
     public function poste(): BelongsTo
     {
         return $this->belongsTo(Poste::class);
+    }
+
+    public function operator(): BelongsTo
+    {
+        return $this->belongsTo(Operator::class, 'operator_id');
     }
 
     public function backupOperator(): BelongsTo

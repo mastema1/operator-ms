@@ -53,9 +53,23 @@
                                         @php
                                             $positionKey = $op->poste_id . '_' . $op->ligne;
                                             
-                                            // Check critical status based ONLY on critical_positions table
-                                            // A position is critical ONLY if explicitly marked as such
-                                            $isCritical = isset($criticalPositions[$positionKey]);
+                                            // Three-tier priority system for critical status determination:
+                                            // 1. If explicit critical_positions record exists (true) → Critical
+                                            // 2. If explicit non-critical override exists (false) → Non-critical  
+                                            // 3. If no specific record exists → Default to Non-critical
+                                            
+                                            $isCritical = false;
+                                            
+                                            if (isset($criticalPositions[$positionKey])) {
+                                                // Explicit critical position record exists
+                                                $isCritical = true;
+                                            } elseif (isset($nonCriticalPositions[$positionKey])) {
+                                                // Explicit non-critical override exists
+                                                $isCritical = false;
+                                            } else {
+                                                // No specific record exists - default to non-critical
+                                                $isCritical = false;
+                                            }
                                         @endphp
                                         @if($isCritical)
                                             <span class="text-red-600 font-medium">Critical</span>

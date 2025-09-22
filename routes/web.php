@@ -36,11 +36,11 @@ Route::get('/sick', function () {
     return view('sick');
 })->name('sick');
 
-// Backup assignment API routes
+// Backup assignment API routes (operator-specific)
 Route::post('/api/backup-assignments/assign', [BackupAssignmentController::class, 'assign'])->middleware(['auth', 'verified'])->name('backup.assign');
 Route::delete('/api/backup-assignments/remove/{assignment}', [BackupAssignmentController::class, 'remove'])->middleware(['auth', 'verified'])->name('backup.remove');
 Route::get('/api/backup-assignments/available-operators', [BackupAssignmentController::class, 'getAvailableOperators'])->middleware(['auth', 'verified'])->name('backup.operators');
-Route::get('/api/backup-assignments/poste/{poste}', [BackupAssignmentController::class, 'getPosteAssignments'])->middleware(['auth', 'verified'])->name('backup.poste');
+Route::get('/api/backup-assignments/operator/{operator}', [BackupAssignmentController::class, 'getOperatorAssignment'])->middleware(['auth', 'verified'])->name('backup.operator');
 
 Route::middleware('auth')->group(function () {
     Route::get('/operators', [\App\Http\Controllers\OperatorController::class, 'index'])->name('operators.index');
@@ -48,11 +48,76 @@ Route::middleware('auth')->group(function () {
     Route::get('/absences', \App\Livewire\Absences::class)->name('absences.index');
     Route::get('/post-status', \App\Livewire\PostStatus::class)->name('post-status.index');
     Route::get('/postes', [\App\Http\Controllers\PosteController::class, 'index'])->name('postes.index');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    
+    // Debug route for cache management (remove in production)
+    Route::get('/debug/cache-status', function() {
+        return response()->json(\App\Services\DashboardCacheManager::getCacheStats());
+    })->name('debug.cache-status');
+    
+    Route::post('/debug/clear-cache', function() {
+        \App\Services\DashboardCacheManager::clearDashboardCache();
+        return response()->json(['message' => 'Dashboard cache cleared successfully']);
+    })->name('debug.clear-cache');
+    
+    // Dashboard title management API
+    Route::get('/api/dashboard/title', [\App\Http\Controllers\DashboardController::class, 'getTitle'])->name('api.dashboard.title.get');
+    Route::post('/api/dashboard/title', [\App\Http\Controllers\DashboardController::class, 'updateTitle'])->name('api.dashboard.title.update');
+    
+    // Debug route for testing Golden Order sorting (remove in production)
+    Route::get('/debug/poste-sorting', function() {
+        $postes = \App\Models\Poste::where('tenant_id', auth()->user()->tenant_id)->get();
+        $sortedPostes = \App\Services\PosteSortingService::sortPostes($postes);
+        $debugInfo = \App\Services\PosteSortingService::debugSorting($postes);
+        
+        return response()->json([
+            'original_count' => $postes->count(),
+            'sorted_count' => $sortedPostes->count(),
+            'sorted_order' => $sortedPostes->pluck('name')->toArray(),
+            'debug_info' => $debugInfo
+        ]);
+    })->name('debug.poste-sorting');
+    
+    // Debug route for analyzing duplicate postes (remove in production)
+    Route::get('/debug/poste-duplicates', function() {
+        $tenantId = auth()->user()->tenant_id;
+        
+        // Get all numbered postes for current tenant
+        $numberedPostes = \App\Models\Poste::where('tenant_id', $tenantId)
+            ->where('name', 'REGEXP', '^Poste [0-9]+$')
+            ->orderBy('name')
+            ->get();
+            
+        // Group by number to find duplicates
+        $grouped = [];
+        foreach ($numberedPostes as $poste) {
+            if (preg_match('/^Poste (\d+)$/', $poste->name, $matches)) {
+                $number = (int)$matches[1];
+                if (!isset($grouped[$number])) {
+                    $grouped[$number] = [];
+                }
+                $grouped[$number][] = $poste->name;
+            }
+        }
+        
+        $duplicates = [];
+        foreach ($grouped as $number => $names) {
+            if (count($names) > 1) {
+                $duplicates[$number] = $names;
+            }
+        }
+        
+        return response()->json([
+            'tenant_id' => $tenantId,
+            'total_numbered_postes' => $numberedPostes->count(),
+            'all_numbered_postes' => $numberedPostes->pluck('name')->toArray(),
+            'duplicates_found' => $duplicates,
+            'duplicate_count' => count($duplicates)
+        ]);
+    })->name('debug.poste-duplicates');
+    
     // Operators create/store/edit/update/destroy
     Route::get('/operators/create', [\App\Http\Controllers\OperatorController::class, 'create'])->name('operators.create');
     Route::post('/operators', [\App\Http\Controllers\OperatorController::class, 'store'])->name('operators.store');
