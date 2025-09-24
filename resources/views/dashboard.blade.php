@@ -25,7 +25,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <!-- Occupied Critical Postes Card -->
                 <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="flex items-center">
+                    <div class="flex items-center mb-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,15 +35,29 @@
                         </div>
                         <div class="ml-4">
                             <h3 class="text-lg font-semibold text-gray-800">Postes Critiques Occupé</h3>
-                            <p class="text-3xl font-bold text-green-600">{{ $occupiedCriticalPostes }}</p>
                             <p class="text-sm text-gray-600">Critical positions currently occupied</p>
                         </div>
+                    </div>
+                    <div class="space-y-2">
+                        @if(isset($ligneBreakdown) && $ligneBreakdown->count() > 0)
+                            @foreach($ligneBreakdown as $ligne => $counts)
+                                <div class="flex justify-between items-center py-2 px-3 bg-green-50 rounded-md">
+                                    <span class="text-sm font-medium text-gray-700">{{ $ligne }}</span>
+                                    <span class="text-lg font-bold text-green-600">{{ $counts['occupied'] }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-md">
+                                <span class="text-sm text-gray-500">No critical positions found</span>
+                                <span class="text-lg font-bold text-gray-400">0</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
                 <!-- Non-Occupied Critical Postes Card -->
                 <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="flex items-center">
+                    <div class="flex items-center mb-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,9 +67,23 @@
                         </div>
                         <div class="ml-4">
                             <h3 class="text-lg font-semibold text-gray-800">Postes Critiques Non-occupé</h3>
-                            <p class="text-3xl font-bold text-red-600">{{ $nonOccupiedCriticalPostes }}</p>
                             <p class="text-sm text-gray-600">Critical positions currently understaffed</p>
                         </div>
+                    </div>
+                    <div class="space-y-2">
+                        @if(isset($ligneBreakdown) && $ligneBreakdown->count() > 0)
+                            @foreach($ligneBreakdown as $ligne => $counts)
+                                <div class="flex justify-between items-center py-2 px-3 {{ $counts['non_occupied'] > 0 ? 'bg-red-50' : 'bg-gray-50' }} rounded-md">
+                                    <span class="text-sm font-medium text-gray-700">{{ $ligne }}</span>
+                                    <span class="text-lg font-bold {{ $counts['non_occupied'] > 0 ? 'text-red-600' : 'text-gray-400' }}">{{ $counts['non_occupied'] }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-md">
+                                <span class="text-sm text-gray-500">No critical positions found</span>
+                                <span class="text-lg font-bold text-gray-400">0</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -332,19 +360,15 @@
                                                     {{ $assignment['poste_name'] }}
                                                 </span>
                                                 
-                                                {{-- Dynamic Status Tags --}}
-                                                @if(isset($assignment['status_tag']) && isset($assignment['status_class']))
+                                                {{-- Dynamic Status Tags - Only show when tag exists --}}
+                                                @if(isset($assignment['status_tag']) && !empty($assignment['status_tag']) && isset($assignment['status_class']))
                                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold {{ $assignment['status_class'] }}">
                                                         {{ $assignment['status_tag'] }}
                                                         @if($assignment['status_tag'] === 'URGENT')
                                                             <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                                             </svg>
-                                                        @elseif($assignment['status_tag'] === 'COVERED')
-                                                            <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fill-rule="evenodd" d="M9 12a1 1 0 102 0V8a1 1 0 10-2 0v4zm1-7a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        @else
+                                                        @elseif($assignment['status_tag'] === 'Occupied')
                                                             <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                             </svg>
@@ -880,23 +904,42 @@
             console.log('Side panel updated with', assignments.length, 'assignment(s)');
         }
 
+        // Helper function to update backup side panel
+        function updateBackupSidePanel(rowIndex, assignments) {
+            const sidePanel = document.querySelector(`#backup-side-panel-${rowIndex}`);
+            if (sidePanel) {
+                if (assignments.length === 0) {
+                    sidePanel.innerHTML = '<p class="text-gray-500 text-sm">No backup assignments</p>';
+                } else {
+                    sidePanel.innerHTML = assignments.map(backup => `
+                        <div class="flex items-center justify-between py-1">
+                            <span class="text-sm">${backup.operator_name}</span>
+                            <button onclick="removeBackup(${backup.id})" class="text-red-600 hover:text-red-800">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
         // Function to remove backup assignment
         function removeBackup(backupId) {
             if (!confirm('Are you sure you want to remove this backup assignment?')) {
                 return;
             }
             
-            // Find the row index for this backup assignment
+            // Find the specific backup element and its container using the backup ID
             const backupElement = event.target.closest('span');
             const container = backupElement.closest('.backup-assignment-container');
-            const posteId = container.dataset.posteId;
+            const operatorId = container.dataset.operatorId;
             
-            // Find the row index by looking for the backup popover
+            // Find the correct row index by matching the operator ID (more reliable than poste ID)
             let rowIndex = null;
-            document.querySelectorAll('[id^="backup-popover-"]').forEach((popover, index) => {
-                const row = popover.closest('tr');
-                const rowContainer = row.querySelector('.backup-assignment-container');
-                if (rowContainer && rowContainer.dataset.posteId === posteId) {
+            document.querySelectorAll('.backup-assignment-container').forEach((containerEl, index) => {
+                if (containerEl.dataset.operatorId === operatorId) {
                     rowIndex = index;
                 }
             });
@@ -912,14 +955,33 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update UI dynamically instead of reloading
-                    if (rowIndex !== null) {
+                    // Method 1: Direct UI update using operator ID (most reliable)
+                    if (operatorId) {
+                        // Remove the backup pill directly from the container
+                        backupElement.remove();
+                        
+                        // Update the container to show "Assign Backup" button
+                        container.innerHTML = `
+                            <button onclick="openBackupAssignment(this, ${rowIndex})" class="inline-flex items-center px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-800 rounded-md text-xs font-medium transition-colors duration-200">
+                                Assign Backup
+                            </button>
+                        `;
+                        
+                        // Also update the side panel if it exists
+                        if (rowIndex !== null) {
+                            updateBackupSidePanel(rowIndex, []);
+                        }
+                        
+                        console.log('Backup assignment removed successfully with direct UI update');
+                    } else if (rowIndex !== null) {
+                        // Method 2: Fallback to the original method if operator ID is missing
                         updateBackupAssignmentUI(rowIndex, null, null);
+                        console.log('Backup assignment removed successfully with fallback method');
                     } else {
-                        // Fallback: reload if we can't determine row index
+                        // Method 3: Last resort - reload page
+                        console.log('Could not determine row index, reloading page');
                         window.location.reload();
                     }
-                    console.log('Backup assignment removed successfully without page reload');
                 } else {
                     alert('Error removing backup: ' + (data.message || 'Unknown error'));
                 }

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Weekly Fitness Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Theme Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="theme-toggle" class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg border border-gray-200 dark:border-gray-700">
+            <svg id="sun-icon" class="w-5 h-5 text-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+            </svg>
+            <svg id="moon-icon" class="w-5 h-5 text-gray-700 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Main Header -->
+            <header class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                    💪 My Weekly Fitness Plan
+                </h1>
+                <p class="text-lg text-gray-600 dark:text-gray-300">
+                    Complete hybrid athlete program for extreme endurance & functional strength
+                </p>
+            </header>
+
+            <!-- Workout Plan Section -->
+            <section class="mb-16">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">🏋️ Workout Plan</h2>
+                    
+                    <!-- Block 1: Hypertrophy -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-red-600 dark:text-red-400 mb-4 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                            Block 1: Hypertrophy & Aerobic Foundation (Weeks 1-4)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm">
+                                <thead>
+                                    <tr class="bg-gray-800 dark:bg-gray-900 text-white">
+                                        <th class="p-3 text-left">Exercise</th>
+                                        <th class="p-3 text-center">Sets</th>
+                                        <th class="p-3 text-center">Reps</th>
+                                        <th class="p-3 text-left">Notes/Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700 dark:text-gray-300">
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3 font-medium">Barbell Back Squats</td>
+                                        <td class="p-3 text-center">4</td>
+                                        <td class="p-3 text-center">8-10</td>
+                                        <td class="p-3 text-sm">3 sec lower, 1 sec lift, 90s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Romanian Deadlifts</td>
+                                        <td class="p-3 text-center">3</td>
+                                        <td class="p-3 text-center">10-12</td>
+                                        <td class="p-3 text-sm">3 sec lower, 1 sec lift, 60s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Walking Lunges</td>
+                                        <td class="p-3 text-center">3</td>
+                                        <td class="p-3 text-center">12 per leg</td>
+                                        <td class="p-3 text-sm">Controlled, 60s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Incline Dumbbell Press</td>
+                                        <td class="p-3 text-center">4</td>
+                                        <td class="p-3 text-center">8-12</td>
+                                        <td class="p-3 text-sm">3 sec lower, 1 sec lift, 75s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Pull-Ups (or Lat Pulldowns)</td>
+                                        <td class="p-3 text-center">4</td>
+                                        <td class="p-3 text-center">6-10</td>
+                                        <td class="p-3 text-sm">2 sec lower, 1 sec lift, 75s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Zone 2 Cardio</td>
+                                        <td class="p-3 text-center">1</td>
+                                        <td class="p-3 text-center">45-60 min</td>
+                                        <td class="p-3 text-sm">Conversational pace</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Block 2: Strength -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-orange-600 dark:text-orange-400 mb-4 bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg">
+                            Block 2: Max Strength & Threshold (Weeks 5-8)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm">
+                                <thead>
+                                    <tr class="bg-gray-800 dark:bg-gray-900 text-white">
+                                        <th class="p-3 text-left">Exercise</th>
+                                        <th class="p-3 text-center">Sets</th>
+                                        <th class="p-3 text-center">Reps</th>
+                                        <th class="p-3 text-left">Notes/Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700 dark:text-gray-300">
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3 font-medium">Barbell Back Squats</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-sm">Explosive up, controlled down, 120s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Flat Barbell Bench Press</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-sm">Explosive up, controlled down, 120s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Barbell Deadlifts</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-center">3-5</td>
+                                        <td class="p-3 text-sm">Explosive up, controlled down, 180s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Weighted Pull-Ups</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-sm">Explosive up, controlled down, 120s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Hill Sprints / Rower Intervals</td>
+                                        <td class="p-3 text-center">8-10</td>
+                                        <td class="p-3 text-center">15-20s / 500m</td>
+                                        <td class="p-3 text-sm">Max effort, 90s rest</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Block 3: Power -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4 bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
+                            Block 3: Power & Performance Peak (Weeks 9-12)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm">
+                                <thead>
+                                    <tr class="bg-gray-800 dark:bg-gray-900 text-white">
+                                        <th class="p-3 text-left">Exercise</th>
+                                        <th class="p-3 text-center">Sets</th>
+                                        <th class="p-3 text-center">Reps</th>
+                                        <th class="p-3 text-left">Notes/Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700 dark:text-gray-300">
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3 font-medium">Box Jumps</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-center">3</td>
+                                        <td class="p-3 text-sm">Max explosiveness, 60s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Power Cleans</td>
+                                        <td class="p-3 text-center">5</td>
+                                        <td class="p-3 text-center">3</td>
+                                        <td class="p-3 text-sm">Max explosiveness, 120s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Medicine Ball Slams</td>
+                                        <td class="p-3 text-center">3</td>
+                                        <td class="p-3 text-center">10</td>
+                                        <td class="p-3 text-sm">Max explosiveness, 60s rest</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">Run/Cycle/Hike</td>
+                                        <td class="p-3 text-center">1</td>
+                                        <td class="p-3 text-center">75-90 min</td>
+                                        <td class="p-3 text-sm">Steady, challenging pace</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="p-3">"Cindy" AMRAP 20min</td>
+                                        <td class="p-3 text-center">1</td>
+                                        <td class="p-3 text-center">AMRAP</td>
+                                        <td class="p-3 text-sm">5 Pull-ups, 10 Push-ups, 15 Air Squats</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nutrition Plan Section -->
+            <section class="mb-16">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">🍽️ Nutrition Plan</h2>
+                    
+                    <!-- Daily Targets -->
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-green-800 dark:text-green-300 mb-2">Daily Targets</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex justify-between">
+                                <span class="font-medium">Calories:</span>
+                                <span class="text-green-600 dark:text-green-400 font-bold">3000-3200 kcal</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-medium">Protein:</span>
+                                <span class="text-green-600 dark:text-green-400 font-bold">140-160g</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm">
+                            <thead>
+                                <tr class="bg-gray-800 dark:bg-gray-900 text-white">
+                                    <th class="p-3 text-left">Meal</th>
+                                    <th class="p-3 text-left">Food Items</th>
+                                    <th class="p-3 text-left">Macronutrients</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 dark:text-gray-300">
+                                <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="p-3 font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300">
+                                        Breakfast<br>
+                                        <span class="text-sm font-normal text-gray-600 dark:text-gray-400">07:30</span>
+                                    </td>
+                                    <td class="p-3">
+                                        • 3-4 Boiled Eggs (Bidh)<br>
+                                        • 1 piece Khobz with Olive Oil<br>
+                                        • 1 Banana or Orange
+                                    </td>
+                                    <td class="p-3 text-sm">
+                                        High protein base with slow-release energy for morning focus and muscle protection
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="p-3 font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300">
+                                        Pre-Workout Lunch<br>
+                                        <span class="text-sm font-normal text-gray-600 dark:text-gray-400">12:30</span>
+                                    </td>
+                                    <td class="p-3">
+                                        • Large Rice (Arroz) or Potatoes<br>
+                                        • Chicken (Dajaj) or Kefta Tagine<br>
+                                        • Large bowl Lentil Stew (Adas)
+                                    </td>
+                                    <td class="p-3 text-sm">
+                                        High carb energy load for workout. Stocks muscle glycogen for evening power and endurance
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="p-3 font-medium bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300">
+                                        Pre-Gym Snack<br>
+                                        <span class="text-sm font-normal text-gray-600 dark:text-gray-400">16:30</span>
+                                    </td>
+                                    <td class="p-3">
+                                        • 1 Banana<br>
+                                        • Small handful Peanuts or Almonds
+                                    </td>
+                                    <td class="p-3 text-sm">
+                                        Fast-digesting energy to top off levels and prevent sluggishness at workout start
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="p-3 font-medium bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
+                                        Recovery Dinner<br>
+                                        <span class="text-sm font-normal text-gray-600 dark:text-gray-400">19:30</span>
+                                    </td>
+                                    <td class="p-3">
+                                        • LARGEST meal of day<br>
+                                        • Very large Roast Chicken<br>
+                                        • Generous Rice or Potatoes<br>
+                                        • Vegetables or Salade Marocaine
+                                    </td>
+                                    <td class="p-3 text-sm">
+                                        CRITICAL RECOVERY WINDOW. Protein starts repair/growth, carbs replenish burned energy
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="p-3 font-medium bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300">
+                                        Overnight Repair<br>
+                                        <span class="text-sm font-normal text-gray-600 dark:text-gray-400">21:30</span>
+                                    </td>
+                                    <td class="p-3">
+                                        • 1 can Sardines (Sardine)<br>
+                                        • OR 1-2 Boiled Eggs (Bidh)
+                                    </td>
+                                    <td class="p-3 text-sm">
+                                        Slow-digesting protein for overnight muscle repair and preventing breakdown during sleep
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Key Principles -->
+                    <div class="mt-8 bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-300 mb-4">🔑 Key Nutrition Principles</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">Hydration</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">3-4 liters water daily. Don't wait until thirsty.</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">Buy Local</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Best quality at the Souk, not supermarket.</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">Cook in Bulk</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Large batches save time and money.</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">Listen to Body</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">If losing weight, add more rice, potatoes, or olive oil.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', savedTheme === 'dark');
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = html.classList.contains('dark');
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        });
+    </script>
+</body>
+</html>

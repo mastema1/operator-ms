@@ -134,6 +134,9 @@ class QueryOptimizationService
         $occupiedCount = 0;
         $nonOccupiedCount = 0;
         $tableData = collect();
+        
+        // Per-ligne breakdown tracking
+        $ligneBreakdown = collect();
 
         foreach ($criticalPositions as $position) {
             $posteId = $position->poste_id;
@@ -143,6 +146,14 @@ class QueryOptimizationService
             if (!$position->poste) {
                 \Log::warning("Critical position {$position->id} references missing poste {$posteId}");
                 continue;
+            }
+            
+            // Initialize ligne in breakdown if not exists
+            if (!$ligneBreakdown->has($ligne)) {
+                $ligneBreakdown->put($ligne, [
+                    'occupied' => 0,
+                    'non_occupied' => 0
+                ]);
             }
             
             // Get operators for this position
@@ -172,8 +183,14 @@ class QueryOptimizationService
             // Update counters
             if ($isOccupied) {
                 $occupiedCount++;
+                $currentCounts = $ligneBreakdown->get($ligne);
+                $currentCounts['occupied']++;
+                $ligneBreakdown->put($ligne, $currentCounts);
             } else {
                 $nonOccupiedCount++;
+                $currentCounts = $ligneBreakdown->get($ligne);
+                $currentCounts['non_occupied']++;
+                $ligneBreakdown->put($ligne, $currentCounts);
             }
             
             // Add to table data
@@ -196,23 +213,23 @@ class QueryOptimizationService
                         ]];
                     }
                     
-                    // Determine intelligent status
+                    // Determine status tags according to audit requirements
                     $hasBackup = !empty($backupData);
                     $statusTag = '';
                     $statusClass = '';
                     
                     if (!$isPresent && !$hasBackup) {
-                        // Absent with no backup = URGENT
+                        // Scenario 1: Absent with no backup = URGENT (Red)
                         $statusTag = 'URGENT';
                         $statusClass = 'bg-red-500 text-white animate-pulse';
                     } elseif (!$isPresent && $hasBackup) {
-                        // Absent but has backup = COVERED
-                        $statusTag = 'COVERED';
-                        $statusClass = 'bg-yellow-500 text-white';
-                    } else {
-                        // Present = OCCUPIED
-                        $statusTag = 'OCCUPIED';
+                        // Scenario 2: Absent but has backup = Occupied (Green)
+                        $statusTag = 'Occupied';
                         $statusClass = 'bg-green-500 text-white';
+                    } else {
+                        // Scenario 3: Present = No tag (empty)
+                        $statusTag = '';
+                        $statusClass = '';
                     }
                     
                     $tableData->push([
@@ -228,7 +245,7 @@ class QueryOptimizationService
                         'backup_assignments' => $backupData,
                         'status_tag' => $statusTag,
                         'status_class' => $statusClass,
-                        'urgency_level' => !$isPresent && !$hasBackup ? 3 : (!$isPresent && $hasBackup ? 2 : 1) // 3=urgent, 2=covered, 1=occupied
+                        'urgency_level' => !$isPresent && !$hasBackup ? 3 : (!$isPresent && $hasBackup ? 2 : 1) // 3=urgent, 2=occupied_by_backup, 1=present
                     ]);
                 }
             } else {
@@ -260,10 +277,14 @@ class QueryOptimizationService
             ['ligne', 'asc']                     // Finally by ligne
         ])->values();
 
+        // Sort ligne breakdown for consistent display
+        $ligneBreakdown = $ligneBreakdown->sortKeys();
+
         return [
             'occupiedCriticalPostes' => $occupiedCount,
             'nonOccupiedCriticalPostes' => $nonOccupiedCount,
             'criticalPostesWithOperators' => $tableData,
+            'ligneBreakdown' => $ligneBreakdown,
             'dashboardTitle' => 'Dashboard'
         ];
     }

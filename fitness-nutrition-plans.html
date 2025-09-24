@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Athlete Program - Workout & Nutrition Plans</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 700; }
+        .content { padding: 40px; }
+        .section { margin-bottom: 50px; }
+        .section-title { font-size: 2rem; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #3498db; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .block-header { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 20px; text-align: center; font-size: 1.3rem; font-weight: bold; }
+        th { background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); color: white; padding: 15px 10px; text-align: center; font-weight: 600; }
+        td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #ecf0f1; vertical-align: middle; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        tr:hover { background-color: #e3f2fd; transition: background-color 0.3s ease; }
+        .day-cell { background: #3498db !important; color: white; font-weight: bold; }
+        .workout-focus { background: #2ecc71 !important; color: white; font-weight: bold; }
+        .exercise-name { text-align: left; font-weight: 500; color: #2c3e50; }
+        .nutrition-header { background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; padding: 20px; text-align: center; font-size: 1.3rem; font-weight: bold; }
+        .time-cell { background: #f39c12 !important; color: white; font-weight: bold; }
+        .phase-cell { background: #e67e22 !important; color: white; font-weight: bold; }
+        .food-cell { text-align: left; padding: 15px; white-space: pre-line; }
+        .purpose-cell { text-align: left; padding: 15px; font-style: italic; color: #7f8c8d; }
+        .principles-list { list-style: none; padding: 0; }
+        .principles-list li { background: #ecf0f1; margin: 10px 0; padding: 15px; border-radius: 8px; border-left: 4px solid #e74c3c; }
+        @media (max-width: 768px) { .container { margin: 10px; } .content { padding: 20px; } table { font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏋️ The Hybrid Athlete Program</h1>
+            <p>Complete Workout & Nutrition Guide for Extreme Endurance & Functional Strength</p>
+            <p><strong>User:</strong> 23 Year Old Male, 69kg, 178cm</p>
+        </div>
+
+        <div class="content">
+            <!-- Key Principles -->
+            <div class="section">
+                <h2 class="section-title">🔑 Key Principles</h2>
+                <ul class="principles-list">
+                    <li><strong>Progressive Overload:</strong> Each week, aim to do more than the last. Track everything.</li>
+                    <li><strong>RIR (Reps In Reserve):</strong> Find weights that leave you with 1-2 reps in reserve.</li>
+                    <li><strong>Tempo is CRUCIAL:</strong> Follow the tempo instructions exactly.</li>
+                    <li><strong>Form Over Everything:</strong> Perfect form is always better than heavier weight.</li>
+                    <li><strong>Deload Weeks:</strong> Between blocks, use 50-60% of usual weight for recovery.</li>
+                    <li><strong>Consistency:</strong> Stick to the plan - consistency beats intensity.</li>
+                </ul>
+            </div>
+
+            <!-- Block 1: Hypertrophy -->
+            <div class="section">
+                <h2 class="section-title">💪 Block 1: Hypertrophy (Weeks 1-4)</h2>
+                <table>
+                    <tr class="block-header"><td colspan="7">Hypertrophy & Aerobic Foundation - Build muscle mass and work capacity</td></tr>
+                    <tr><th>Day</th><th>Focus</th><th>Exercise</th><th>Sets</th><th>Reps</th><th>Tempo</th><th>Rest</th></tr>
+                    <tr><td class="day-cell">1</td><td class="workout-focus">Lower Body</td><td class="exercise-name">Barbell Back Squats</td><td>4</td><td>8-10</td><td>3s down, 1s up</td><td>90s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Romanian Deadlifts</td><td>3</td><td>10-12</td><td>3s down, 1s up</td><td>60s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Walking Lunges</td><td>3</td><td>12/leg</td><td>Controlled</td><td>60s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Leg Press</td><td>3</td><td>10-15</td><td>2s down, 1s up</td><td>60s</td></tr>
+                    <tr><td class="day-cell">2</td><td class="workout-focus">Upper Body</td><td class="exercise-name">Incline DB Press</td><td>4</td><td>8-12</td><td>3s down, 1s up</td><td>75s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Pull-Ups</td><td>4</td><td>6-10</td><td>2s down, 1s up</td><td>75s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Cable Rows</td><td>3</td><td>10-12</td><td>1s pause</td><td>60s</td></tr>
+                    <tr><td class="day-cell">3</td><td class="workout-focus">Recovery</td><td class="exercise-name">Zone 2 Cardio</td><td>1</td><td>45-60min</td><td>Easy pace</td><td>-</td></tr>
+                    <tr><td class="day-cell">7</td><td class="workout-focus">Rest</td><td class="exercise-name">Complete Rest</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                </table>
+            </div>
+
+            <!-- Block 2: Strength -->
+            <div class="section">
+                <h2 class="section-title">🏋️ Block 2: Strength (Weeks 5-8)</h2>
+                <table>
+                    <tr class="block-header"><td colspan="7">Max Strength & Threshold - Convert muscle into raw strength</td></tr>
+                    <tr><th>Day</th><th>Focus</th><th>Exercise</th><th>Sets</th><th>Reps</th><th>Tempo</th><th>Rest</th></tr>
+                    <tr><td class="day-cell">1</td><td class="workout-focus">Lower Strength</td><td class="exercise-name">Barbell Squats</td><td>5</td><td>5</td><td>Explosive up</td><td>120s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Good Mornings</td><td>3</td><td>8</td><td>Controlled</td><td>90s</td></tr>
+                    <tr><td class="day-cell">2</td><td class="workout-focus">Upper Strength</td><td class="exercise-name">Bench Press</td><td>5</td><td>5</td><td>Explosive up</td><td>120s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Weighted Pull-Ups</td><td>5</td><td>5</td><td>Explosive up</td><td>120s</td></tr>
+                    <tr><td class="day-cell">4</td><td class="workout-focus">Deadlift Day</td><td class="exercise-name">Deadlifts</td><td>5</td><td>3-5</td><td>Explosive up</td><td>180s</td></tr>
+                    <tr><td class="day-cell">6</td><td class="workout-focus">Threshold</td><td class="exercise-name">Hill Sprints</td><td>8-10</td><td>15-20s</td><td>Max effort</td><td>90s</td></tr>
+                </table>
+            </div>
+
+            <!-- Block 3: Power -->
+            <div class="section">
+                <h2 class="section-title">⚡ Block 3: Power (Weeks 9-12)</h2>
+                <table>
+                    <tr class="block-header"><td colspan="7">Power & Performance Peak - Explosive power + endurance</td></tr>
+                    <tr><th>Day</th><th>Focus</th><th>Exercise</th><th>Sets</th><th>Reps</th><th>Tempo</th><th>Rest</th></tr>
+                    <tr><td class="day-cell">1</td><td class="workout-focus">Power</td><td class="exercise-name">Box Jumps</td><td>5</td><td>3</td><td>Max explosive</td><td>60s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Power Cleans</td><td>5</td><td>3</td><td>Max explosive</td><td>120s</td></tr>
+                    <tr><td></td><td></td><td class="exercise-name">Med Ball Slams</td><td>3</td><td>10</td><td>Max explosive</td><td>60s</td></tr>
+                    <tr><td class="day-cell">2</td><td class="workout-focus">Endurance</td><td class="exercise-name">Run/Cycle/Hike</td><td>1</td><td>75-90min</td><td>Steady pace</td><td>-</td></tr>
+                    <tr><td class="day-cell">6</td><td class="workout-focus">MetCon Test</td><td class="exercise-name">"Cindy" AMRAP 20min</td><td>1</td><td>AMRAP</td><td>Consistent</td><td>-</td></tr>
+                </table>
+            </div>
+
+            <!-- Nutrition Plan -->
+            <div class="section">
+                <h2 class="section-title">🍽️ Nutrition Plan (Post-5PM Workout)</h2>
+                <table>
+                    <tr class="nutrition-header"><td colspan="4">Daily Targets: 3000-3200 kcal | Protein: 140-160g</td></tr>
+                    <tr><th>Time</th><th>Phase</th><th>Food Options (Moroccan Focus)</th><th>Purpose / Notes</th></tr>
+                    <tr>
+                        <td class="time-cell">07:30</td>
+                        <td class="phase-cell">Workday Fuel</td>
+                        <td class="food-cell">• 3-4 Boiled Eggs (Bidh)
+• Khobz with Olive Oil
+• 1 Banana or Orange</td>
+                        <td class="purpose-cell">Solid protein base and slow-release energy for morning focus</td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell">12:30</td>
+                        <td class="phase-cell">Pre-Workout Lunch</td>
+                        <td class="food-cell">• Large Rice (Arroz) or Potatoes
+• Chicken (Dajaj) or Kefta Tagine
+• Lentil Stew (Adas)</td>
+                        <td class="purpose-cell">Main energy load for workout. Carbs stock muscle glycogen for evening power</td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell">16:30</td>
+                        <td class="phase-cell">Immediate Fuel</td>
+                        <td class="food-cell">• 1 Banana
+• Peanuts or Almonds</td>
+                        <td class="purpose-cell">Fast-digesting snack to top off energy before gym</td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell">19:30</td>
+                        <td class="phase-cell">Recovery Dinner</td>
+                        <td class="food-cell">• LARGEST meal of day
+• Large Roast Chicken
+• Generous Rice/Potatoes
+• Vegetables/Salade</td>
+                        <td class="purpose-cell">CRITICAL RECOVERY WINDOW. Protein for repair, carbs replenish energy</td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell">21:30</td>
+                        <td class="phase-cell">Overnight Repair</td>
+                        <td class="food-cell">• 1 can Sardines
+• OR 1-2 Boiled Eggs</td>
+                        <td class="purpose-cell">Slow-digesting protein for overnight muscle repair</td>
+                    </tr>
+                </table>
+
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h3 style="color: #856404; margin-bottom: 15px;">🔑 Key Nutrition Principles</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0; padding: 10px; background: #ffeaa7; border-radius: 5px;"><strong>Hydration:</strong> 3-4 liters water daily</li>
+                        <li style="margin: 10px 0; padding: 10px; background: #ffeaa7; border-radius: 5px;"><strong>Buy Local:</strong> Best quality at the Souk, not supermarket</li>
+                        <li style="margin: 10px 0; padding: 10px; background: #ffeaa7; border-radius: 5px;"><strong>Cook in Bulk:</strong> Make large batches to save time and money</li>
+                        <li style="margin: 10px 0; padding: 10px; background: #ffeaa7; border-radius: 5px;"><strong>Listen to Body:</strong> If losing weight, add more rice, potatoes, or olive oil</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="section">
+                <h2 class="section-title">📊 Progress Tracker</h2>
+                <table>
+                    <tr style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: white; padding: 20px; text-align: center; font-size: 1.3rem; font-weight: bold;">
+                        <td colspan="9">Workout Log - Track Every Single Workout</td>
+                    </tr>
+                    <tr><th>Date</th><th>Exercise</th><th>Weight (kg)</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>Set 4</th><th>Set 5</th><th>Notes (RIR, feel)</th></tr>
+                    <tr style="background: #e8f5e8; font-style: italic;">
+                        <td>22/09/2025</td><td>Barbell Squat</td><td>60</td><td>10</td><td>9</td><td>8</td><td>8</td><td>-</td><td>Last set RIR 1. Felt strong.</td>
+                    </tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

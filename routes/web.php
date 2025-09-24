@@ -15,7 +15,7 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', \App\Livewire\Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard-static', [StaticDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.static');
 
 // About Me page routes
