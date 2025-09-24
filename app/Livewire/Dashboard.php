@@ -67,36 +67,38 @@ class Dashboard extends Component
     
     private function getDashboardDataWithFilters(int $tenantId): array
     {
-        // Use cache key that includes filters for better performance
-        $cacheKey = "dashboard_filtered_{$tenantId}_" . md5($this->search . $this->ligneFilter) . '_' . now()->format('Y-m-d-H');
+        // Use optimized service with shorter cache duration for real-time updates
+        $cacheKey = "dashboard_filtered_{$tenantId}_" . md5($this->search . $this->ligneFilter) . '_' . now()->format('Y-m-d-H-i');
         
-        return Cache::remember($cacheKey, DashboardCacheManager::DASHBOARD_CACHE_DURATION, function () use ($tenantId) {
-            // Get base dashboard data
-            $dashboardData = QueryOptimizationService::getDashboardData($tenantId);
+        return Cache::remember($cacheKey, 30, function () use ($tenantId) { // 30 seconds for concurrent load optimization
+            // Get optimized dashboard data using single-query approach
+            $dashboardData = \App\Services\AdvancedQueryOptimizationService::getOptimizedDashboardData($tenantId);
             
-            // Apply filters to the critical posts data
+            // Apply filters to the critical posts data if needed
             if (!empty($this->search) || !empty($this->ligneFilter)) {
                 $filteredData = $dashboardData['criticalPostesWithOperators']->filter(function ($assignment) {
                     $matchesSearch = true;
                     $matchesLigne = true;
                     
-                    // Apply search filter (name and poste)
+                    // Apply search filter (name and poste) - case insensitive
                     if (!empty($this->search)) {
-                        $searchTerm = strtolower($this->search);
-                        $matchesSearch = 
-                            str_contains(strtolower($assignment['operator_name']), $searchTerm) ||
-                            str_contains(strtolower($assignment['poste_name']), $searchTerm);
+                        $searchTerm = strtolower(trim($this->search));
+                        $operatorName = strtolower($assignment['operator_name'] ?? '');
+                        $posteName = strtolower($assignment['poste_name'] ?? '');
+                        
+                        $matchesSearch = str_contains($operatorName, $searchTerm) || 
+                                       str_contains($posteName, $searchTerm);
                     }
                     
-                    // Apply ligne filter
+                    // Apply ligne filter - exact match
                     if (!empty($this->ligneFilter)) {
-                        $matchesLigne = $assignment['ligne'] === $this->ligneFilter;
+                        $matchesLigne = ($assignment['ligne'] ?? '') === $this->ligneFilter;
                     }
                     
                     return $matchesSearch && $matchesLigne;
                 });
                 
-                $dashboardData['criticalPostesWithOperators'] = $filteredData;
+                $dashboardData['criticalPostesWithOperators'] = $filteredData->values();
             }
             
             return $dashboardData;

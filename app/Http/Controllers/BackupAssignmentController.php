@@ -81,28 +81,42 @@ class BackupAssignmentController extends Controller
     {
         $operatorId = $request->get('operator_id'); // The operator being replaced
         $search = $request->get('search', '');
+        $tenantId = auth()->user()->tenant_id ?? 0;
 
-        // Get operators already assigned as backup operators today
-        $assignedOperatorIds = BackupAssignment::whereDate('assigned_date', today())
-            ->pluck('backup_operator_id');
+        // Use optimized service for better performance
+        $operators = \App\Services\AdvancedQueryOptimizationService::getAvailableBackupOperators(
+            $tenantId, 
+            $operatorId
+        );
 
-        // Exclude the specific operator being replaced and any already assigned backup operators
-        $excludedIds = $assignedOperatorIds->push($operatorId);
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $searchTerm = strtolower(trim($search));
+            $operators = $operators->filter(function ($operator) use ($searchTerm) {
+                $firstName = strtolower($operator->first_name ?? '');
+                $lastName = strtolower($operator->last_name ?? '');
+                $matricule = strtolower($operator->matricule ?? '');
+                
+                return str_contains($firstName, $searchTerm) || 
+                       str_contains($lastName, $searchTerm) ||
+                       str_contains($matricule, $searchTerm);
+            });
+        }
 
-        $operators = Operator::whereNotIn('id', $excludedIds)
-            ->when($search, function ($query) use ($search) {
-                $term = '%' . $search . '%';
-                $query->where(function ($q) use ($term) {
-                    $q->where('first_name', 'like', $term)
-                      ->orWhere('last_name', 'like', $term);
-                });
+        // Convert to array format expected by frontend and limit results
+        $operatorsArray = $operators->take(20) // Limit results for performance
+            ->map(function ($operator) {
+                return [
+                    'id' => $operator->id,
+                    'first_name' => $operator->first_name,
+                    'last_name' => $operator->last_name,
+                    'matricule' => $operator->matricule,
+                    'poste_name' => $operator->poste_name
+                ];
             })
-            ->select('id', 'first_name', 'last_name')
-            ->orderBy('first_name')
-            ->limit(20)
-            ->get();
+            ->values();
 
-        return response()->json($operators);
+        return response()->json($operatorsArray);
     }
 
     public function getOperatorAssignment(Request $request, $operatorId): JsonResponse

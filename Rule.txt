@@ -1,0 +1,1 @@
+Rule 1: take the current optimizations into account, and do not respond in a way that would reduce their effectivness or harm current performance

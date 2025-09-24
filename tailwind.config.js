@@ -7,6 +7,21 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './app/**/*.php', // Include PHP files for dynamic classes
+    ],
+
+    // Safelist critical status tag classes to prevent purging
+    safelist: [
+        'bg-red-500',
+        'bg-green-500', 
+        'bg-yellow-500',
+        'text-white',
+        'animate-pulse',
+        // Status tag combinations
+        {
+            pattern: /bg-(red|green|yellow)-(500)/,
+            variants: ['hover', 'focus'],
+        },
     ],
 
     theme: {

@@ -133,7 +133,7 @@
                                         
                                         {{-- Dynamic Status Tags - Only show when tag exists --}}
                                         @if(isset($assignment['status_tag']) && !empty($assignment['status_tag']) && isset($assignment['status_class']))
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold {{ $assignment['status_class'] }}">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold opacity-decay-preserve status-tag {{ $assignment['status_class'] }}">
                                                 {{ $assignment['status_tag'] }}
                                                 @if($assignment['status_tag'] === 'URGENT')
                                                     <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
@@ -224,19 +224,29 @@
     @if($criticalPostesWithOperators->count() > 0)
         @foreach($criticalPostesWithOperators as $assignment)
             <!-- Backup Assignment Popover -->
-            <div id="backup-popover-{{ $loop->index }}" class="backup-popover hidden fixed z-50 w-64 bg-white border border-gray-200 rounded-md shadow-xl">
+            <div id="backup-popover-{{ $loop->index }}" class="backup-popover hidden absolute z-50 w-64 bg-white border-2 border-blue-200 rounded-lg shadow-2xl">
                 <div class="p-4">
-                    <h4 class="text-sm font-medium text-gray-900 mb-3">Assign Backup Operators</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Assign Backup Operators
+                    </h4>
                     <div class="space-y-2">
-                        <div class="backup-slot cursor-pointer p-2 border border-gray-200 rounded text-sm text-gray-600 hover:bg-gray-50" onclick="openOperatorSelection({{ $loop->index }}, 1, '{{ $assignment['operator_id'] ?? '' }}', '{{ $assignment['poste_id'] ?? '' }}')">
-                            Select Backup Operator
+                        <div class="backup-slot cursor-pointer p-3 border border-blue-200 rounded-md text-sm text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-colors duration-200" onclick="openOperatorSelection({{ $loop->index }}, 1, '{{ $assignment['operator_id'] ?? '' }}', '{{ $assignment['poste_id'] ?? '' }}')">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                Select Backup Operator
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Operator Selection Panel -->
-            <div id="operator-panel-{{ $loop->index }}" class="operator-panel hidden fixed z-50 w-80 bg-white border border-gray-200 rounded-md shadow-xl">
+            <div id="operator-panel-{{ $loop->index }}" class="operator-panel hidden absolute z-50 w-80 bg-white border-2 border-green-200 rounded-lg shadow-2xl">
                 <div class="p-4">
                     <div class="flex items-center justify-between mb-3">
                         <h4 class="text-sm font-medium text-gray-900">Select Operator</h4>
@@ -298,10 +308,36 @@
                     backdrop.classList.remove('hidden');
                 }
                 
-                // Position the popover relative to the button that was clicked
+                // Position the popover directly next to the button that was clicked
+                // For absolute positioning, we need to account for scroll position
                 const buttonRect = button.getBoundingClientRect();
-                popover.style.left = (buttonRect.left) + 'px';
-                popover.style.top = (buttonRect.bottom + 5) + 'px';
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                
+                const popoverWidth = 256; // w-64 = 16rem = 256px
+                
+                // Try to position to the right of the button first
+                let leftPosition = buttonRect.right + scrollLeft + 8; // 8px gap
+                let topPosition = buttonRect.top + scrollTop;
+                
+                // If popup would go off-screen to the right, position it to the left
+                if (leftPosition + popoverWidth > window.innerWidth + scrollLeft) {
+                    leftPosition = buttonRect.left + scrollLeft - popoverWidth - 8;
+                }
+                
+                // If still off-screen to the left, position below the button instead
+                if (leftPosition < scrollLeft + 8) {
+                    leftPosition = buttonRect.left + scrollLeft;
+                    topPosition = buttonRect.bottom + scrollTop + 8;
+                }
+                
+                // Ensure popup doesn't go off the top of the screen
+                if (topPosition < scrollTop + 8) {
+                    topPosition = scrollTop + 8;
+                }
+                
+                popover.style.left = leftPosition + 'px';
+                popover.style.top = topPosition + 'px';
                 
                 popover.classList.remove('hidden');
             } else {
@@ -318,10 +354,12 @@
         }
     }
 
-    function openOperatorSelection(rowIndex, slot, operatorId) {
-        console.log('openOperatorSelection called with rowIndex:', rowIndex, 'slot:', slot, 'operatorId:', operatorId);
+    function openOperatorSelection(rowIndex, slot, operatorId, posteId) {
+        console.log('openOperatorSelection called with rowIndex:', rowIndex, 'slot:', slot, 'operatorId:', operatorId, 'posteId:', posteId);
         currentRowIndex = rowIndex;
         currentSlot = slot;
+        currentOperatorId = operatorId;
+        currentPosteId = posteId;
         
         // Hide all panels first
         document.querySelectorAll('.operator-panel').forEach(panel => {
@@ -341,22 +379,42 @@
             return;
         }
         
-        // Position the panel to the right of the popover, but ensure it stays within viewport
-        let leftPosition = popoverRect.right + 10;
-        const panelWidth = 320; // 80 * 4 = 320px (w-80)
+        // Position the panel directly next to the popover with smart positioning
+        // For absolute positioning, we need to account for scroll position
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
         
-        // If panel would go off-screen, position it to the left of the popover instead
-        if (leftPosition + panelWidth > window.innerWidth) {
-            leftPosition = popoverRect.left - panelWidth - 10;
+        const panelWidth = 320; // w-80 = 20rem = 320px
+        const gap = 8; // 8px gap between popover and panel
+        
+        // Try to position to the right of the popover first
+        let leftPosition = popoverRect.right + scrollLeft + gap;
+        let topPosition = popoverRect.top + scrollTop;
+        
+        // If panel would go off-screen to the right, position it to the left of the popover
+        if (leftPosition + panelWidth > window.innerWidth + scrollLeft) {
+            leftPosition = popoverRect.left + scrollLeft - panelWidth - gap;
         }
         
-        // Ensure panel doesn't go off the left edge
-        if (leftPosition < 10) {
-            leftPosition = 10;
+        // If still off-screen to the left, position it below the popover instead
+        if (leftPosition < scrollLeft + gap) {
+            leftPosition = popoverRect.left + scrollLeft;
+            topPosition = popoverRect.bottom + scrollTop + gap;
+        }
+        
+        // Ensure panel doesn't go off the top of the screen
+        if (topPosition < scrollTop + gap) {
+            topPosition = scrollTop + gap;
+        }
+        
+        // Ensure panel doesn't go off the bottom of the screen
+        const panelHeight = 300; // Approximate height
+        if (topPosition + panelHeight > window.innerHeight + scrollTop) {
+            topPosition = window.innerHeight + scrollTop - panelHeight - gap;
         }
         
         panel.style.left = leftPosition + 'px';
-        panel.style.top = popoverRect.top + 'px';
+        panel.style.top = topPosition + 'px';
         
         panel.classList.remove('hidden');
         console.log('Panel shown at position:', leftPosition, popoverRect.top);
@@ -492,13 +550,11 @@
     function selectOperator(operator, rowIndex, slot) {
         console.log('selectOperator called:', {operator, rowIndex, slot});
         
-        // Get both poste ID and operator ID from the current row's backup assignment container
-        const row = document.querySelector(`#backup-popover-${rowIndex}`).closest('tr');
-        const container = row.querySelector('[data-poste-id]');
-        const posteId = container ? container.dataset.posteId : null;
-        const operatorId = container ? container.dataset.operatorId : null;
+        // Use the global variables set by openOperatorSelection
+        const posteId = currentPosteId;
+        const operatorId = currentOperatorId;
         
-        console.log('Found posteId:', posteId, 'operatorId:', operatorId);
+        console.log('Using stored posteId:', posteId, 'operatorId:', operatorId);
         console.log('Request payload:', {
             poste_id: posteId,
             operator_id: operatorId,
@@ -508,7 +564,7 @@
         });
         
         if (!posteId || !operatorId) {
-            alert('Error: Could not find poste ID or operator ID');
+            alert('Error: Missing poste ID or operator ID');
             return;
         }
         
@@ -576,17 +632,26 @@
     function updateBackupAssignmentUI(rowIndex, assignment, slot) {
         console.log('updateBackupAssignmentUI called:', {rowIndex, assignment, slot});
         
-        // Get the backup assignment container for this row
-        const row = document.querySelector(`#backup-popover-${rowIndex}`).closest('tr');
-        const container = row.querySelector('.backup-assignment-container');
+        // Get the backup assignment container for this row using a different approach
+        // Since modals are now outside the table, we need to find the container by data attributes
+        const containers = document.querySelectorAll('.backup-assignment-container');
+        let container = null;
+        
+        // Find the container that matches our current operator ID
+        for (let cont of containers) {
+            if (cont.dataset.operatorId === currentOperatorId) {
+                container = cont;
+                break;
+            }
+        }
         
         if (!container) {
-            console.error('Backup assignment container not found');
+            console.error('Backup assignment container not found for operator ID:', currentOperatorId);
             return;
         }
         
-        // Fetch current assignment for this operator to rebuild the UI
-        const operatorId = container.dataset.operatorId;
+        // Use the global operatorId
+        const operatorId = currentOperatorId;
         fetch(`/api/backup-assignments/operator/${operatorId}`, {
             method: 'GET',
             headers: {

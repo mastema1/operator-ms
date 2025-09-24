@@ -60,72 +60,33 @@ class OperatorController extends Controller
     {
         $search = (string) $request->input('search', '');
         $criticalOnly = $request->boolean('critical_only');
+        $tenantId = $this->getCurrentTenantId();
 
-        $operators = Operator::with([
-                'poste:id,name',
-                'attendances' => function ($query) {
-                    $query->whereDate('date', today())
-                          ->select('id', 'operator_id', 'date', 'status');
-                }
-            ])
-            ->when($search !== '', function ($q) use ($search) {
-                $term = '%'.$search.'%';
-                $q->where(function ($sub) use ($term) {
-                    $sub->where('first_name', 'like', $term)
-                        ->orWhere('last_name', 'like', $term)
-                        ->orWhere('matricule', 'like', $term)
-                        ->orWhere('anciente', 'like', $term)
-                        ->orWhere('type_de_contrat', 'like', $term)
-                        ->orWhere('ligne', 'like', $term)
-                        ->orWhereHas('poste', function ($p) use ($term) {
-                            $p->where('name', 'like', $term);
-                        });
-                });
-            })
-            ->when($criticalOnly, function ($q) {
-                // Filter by operators who are in critical positions (poste+ligne combinations)
-                $q->whereExists(function ($query) {
-                    $query->select(\DB::raw(1))
-                          ->from('critical_positions')
-                          ->whereColumn('critical_positions.poste_id', 'operators.poste_id')
-                          ->whereColumn('critical_positions.ligne', 'operators.ligne')
-                          ->where('critical_positions.tenant_id', auth()->check() && auth()->user() ? auth()->user()->tenant_id : 0)
-                          ->where('critical_positions.is_critical', true);
-                });
-            })
-            ->orderBy('last_name')
-            ->paginate(15)
-            ->withQueryString();
+        // Use optimized query service for better performance with concurrent users
+        $operatorsCollection = \App\Services\AdvancedQueryOptimizationService::getOptimizedOperatorsList(
+            $tenantId, 
+            $search, 
+            $criticalOnly
+        );
+        
+        // Convert to paginated collection for view compatibility
+        $perPage = 15;
+        $currentPage = request()->get('page', 1);
+        $operators = new \Illuminate\Pagination\LengthAwarePaginator(
+            $operatorsCollection->forPage($currentPage, $perPage),
+            $operatorsCollection->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(), 
+                'pageName' => 'page'
+            ]
+        );
+        $operators->withQueryString();
 
         $total = Operator::count();
 
-        // Cache critical positions for 1 hour since they change infrequently
-        $tenantId = $this->getCurrentTenantId();
-        $criticalPositions = collect();
-        $nonCriticalPositions = collect();
-        
-        if ($tenantId) {
-            $criticalPositions = Cache::remember('critical_positions_' . $tenantId, 3, function () use ($tenantId) { // 3 seconds for real-time updates
-                return \App\Models\CriticalPosition::where('tenant_id', $tenantId)
-                    ->where('is_critical', true)
-                    ->get()
-                    ->keyBy(function ($item) {
-                        return $item->poste_id . '_' . $item->ligne;
-                    });
-            });
-
-            // Cache non-critical position overrides
-            $nonCriticalPositions = Cache::remember('non_critical_positions_' . $tenantId, 3, function () use ($tenantId) { // 3 seconds for real-time updates
-                return \App\Models\CriticalPosition::where('tenant_id', $tenantId)
-                    ->where('is_critical', false)
-                    ->get()
-                    ->keyBy(function ($item) {
-                        return $item->poste_id . '_' . $item->ligne;
-                    });
-            });
-        }
-
-        return view('operators.index', compact('operators', 'search', 'total', 'criticalPositions', 'nonCriticalPositions'));
+        return view('operators.index', compact('operators', 'search', 'total'));
     }
 
     public function apiIndex(): JsonResponse

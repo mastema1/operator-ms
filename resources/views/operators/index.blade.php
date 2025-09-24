@@ -47,31 +47,10 @@
                                     <td class="p-3">{{ $op->matricule }}</td>
                                     <td class="p-3">{{ $op->first_name }}</td>
                                     <td class="p-3">{{ $op->last_name }}</td>
-                                    <td class="p-3">{{ $op->poste?->name }}</td>
+                                    <td class="p-3">{{ $op->poste_name }}</td>
                                     <td class="p-3">{{ $op->ligne }}</td>
                                     <td class="p-3">
-                                        @php
-                                            $positionKey = $op->poste_id . '_' . $op->ligne;
-                                            
-                                            // Three-tier priority system for critical status determination:
-                                            // 1. If explicit critical_positions record exists (true) → Critical
-                                            // 2. If explicit non-critical override exists (false) → Non-critical  
-                                            // 3. If no specific record exists → Default to Non-critical
-                                            
-                                            $isCritical = false;
-                                            
-                                            if (isset($criticalPositions[$positionKey])) {
-                                                // Explicit critical position record exists
-                                                $isCritical = true;
-                                            } elseif (isset($nonCriticalPositions[$positionKey])) {
-                                                // Explicit non-critical override exists
-                                                $isCritical = false;
-                                            } else {
-                                                // No specific record exists - default to non-critical
-                                                $isCritical = false;
-                                            }
-                                        @endphp
-                                        @if($isCritical)
+                                        @if($op->is_critical)
                                             <span class="text-red-600 font-medium">Critical</span>
                                         @else
                                             <span class="text-green-600 font-medium">Non-critical</span>
@@ -80,8 +59,8 @@
                                     {{-- <td class="p-3">{{ $op->anciente }}</td> --}}
                                     {{-- <td class="p-3">{{ $op->type_de_contrat }}</td> --}}
                                     <td class="p-3 space-x-2">
-                                        <a href="{{ route('operators.edit', $op) }}" class="px-3 py-1 border rounded">Edit</a>
-                                        <form method="POST" action="{{ route('operators.destroy', $op) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this operator?');">
+                                        <a href="{{ route('operators.edit', $op->id) }}" class="px-3 py-1 border rounded">Edit</a>
+                                        <form method="POST" action="{{ route('operators.destroy', $op->id) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this operator?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="px-3 py-1 border rounded text-red-700">Delete</button>
