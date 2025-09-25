@@ -65,6 +65,22 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 90, // Keep security logs for 90 days
+            'replace_placeholders' => true,
+        ],
+
+        'audit' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/audit.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 365, // Keep audit logs for 1 year
+            'replace_placeholders' => true,
+        ],
+
         'performance' => [
             'driver' => 'single',
             'path' => storage_path('logs/performance.log'),

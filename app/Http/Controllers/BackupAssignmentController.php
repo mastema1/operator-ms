@@ -83,6 +83,12 @@ class BackupAssignmentController extends Controller
         $search = $request->get('search', '');
         $tenantId = auth()->user()->tenant_id ?? 0;
 
+        // Handle vacant positions (no operator_id) - for vacant positions, we don't need to exclude anyone
+        if (empty($operatorId)) {
+            \Log::info('BackupAssignmentController::getAvailableOperators - Vacant position detected, operator_id is empty');
+            $operatorId = 0; // Use 0 as a safe default that won't match any real operator ID
+        }
+
         // Use optimized service for better performance
         $operators = \App\Services\AdvancedQueryOptimizationService::getAvailableBackupOperators(
             $tenantId, 

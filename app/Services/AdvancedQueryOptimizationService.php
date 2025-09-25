@@ -316,3 +316,9 @@ class AdvancedQueryOptimizationService
         }
     }
 }
+
+            Cache::flush(); // For simplicity, we'll flush all cache
+            // In production, you might want to use tagged caching for more granular control
+        }
+    }
+}

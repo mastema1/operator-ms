@@ -1,1 +1,2 @@
 Rule 1: take the current optimizations into account, and do not respond in a way that would reduce their effectivness or harm current performance
+Rule 2: A proposed change may supersede existing optimizations only if it yields a superior performance outcome while guaranteeing the complete integrity and stability of all current features

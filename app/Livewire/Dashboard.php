@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\DashboardSettings;
-use App\Services\QueryOptimizationService;
 use App\Services\DashboardCacheManager;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
@@ -107,11 +106,12 @@ class Dashboard extends Component
     
     private function getAvailableLignes(int $tenantId): \Illuminate\Support\Collection
     {
-        // Get lignes from critical positions for this tenant
+        // Get lignes from critical positions for this tenant using optimized service
         $cacheKey = "dashboard_lignes_{$tenantId}";
         
         return Cache::remember($cacheKey, 300, function () use ($tenantId) { // 5 minutes cache
-            $dashboardData = QueryOptimizationService::getDashboardData($tenantId);
+            // Use the same optimized service as the main dashboard data
+            $dashboardData = \App\Services\AdvancedQueryOptimizationService::getOptimizedDashboardData($tenantId);
             
             return $dashboardData['criticalPostesWithOperators']
                 ->pluck('ligne')
